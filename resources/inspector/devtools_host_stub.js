@@ -11,138 +11,82 @@
  * @constructor
  */
 RemoteDebuggerAgentStub = function() {
+  this.activeProfilerModules_ =
+      devtools.DebuggerAgent.ProfilerModules.PROFILER_MODULE_NONE;
+  this.profileLogPos_ = 0;
+  this.heapProfSample_ = 0;
+  this.heapProfLog_ = '';
 };
+
 
 RemoteDebuggerAgentStub.prototype.DebugBreak = function() {
 };
 
+
 RemoteDebuggerAgentStub.prototype.GetContextId = function() {
-  RemoteDebuggerAgent.DidGetContextId(3);
+  RemoteDebuggerAgent.SetContextId(3);
 };
 
-RemoteDebuggerAgentStub.prototype.StopProfiling = function() {
+
+RemoteDebuggerAgentStub.prototype.StopProfiling = function(modules) {
+  this.activeProfilerModules_ &= ~modules;
 };
 
-RemoteDebuggerAgentStub.prototype.StartProfiling = function() {
+
+RemoteDebuggerAgentStub.prototype.StartProfiling = function(modules) {
+  var profModules = devtools.DebuggerAgent.ProfilerModules;
+  if (modules & profModules.PROFILER_MODULE_HEAP_SNAPSHOT) {
+    if (modules & profModules.PROFILER_MODULE_HEAP_STATS) {
+      this.heapProfLog_ +=
+          'heap-sample-begin,"Heap","allocated",' +
+              (new Date()).getTime() + '\n' +
+          'heap-sample-stats,"Heap","allocated",10000,1000\n';
+      this.heapProfLog_ +=
+          'heap-sample-item,STRING_TYPE,100,1000\n' +
+          'heap-sample-item,CODE_TYPE,10,200\n' +
+          'heap-sample-item,MAP_TYPE,20,350\n';
+      var sample = RemoteDebuggerAgentStub.HeapSamples[this.heapProfSample_];
+      if (++this.heapProfSample_ == RemoteDebuggerAgentStub.HeapSamples.length)
+          this.heapProfSample_ = 0;
+      for (var obj in sample) {
+        this.heapProfLog_ +=
+            'heap-js-cons-item,"' + obj + '",' + sample[obj][0] +
+            ',' + sample[obj][1] + '\n';
+      }
+      this.heapProfLog_ +=
+          'heap-sample-end,"Heap","allocated"\n';
+    }
+  } else {
+    this.activeProfilerModules_ |= modules;
+  }
 };
 
-RemoteDebuggerAgentStub.prototype.IsProfilingStarted = function() {
+
+RemoteDebuggerAgentStub.prototype.GetActiveProfilerModules = function() {
+  var self = this;
   setTimeout(function() {
-      RemoteDebuggerAgent.DidIsProfilingStarted(true);
+      RemoteDebuggerAgent.DidGetActiveProfilerModules(
+          self.activeProfilerModules_);
   }, 100);
 };
 
-RemoteDebuggerAgentStub.prototype.GetLogLines = function(pos) {
-  if (pos < RemoteDebuggerAgentStub.ProfilerLogBuffer.length) {
-    setTimeout(function() {
-        RemoteDebuggerAgent.DidGetLogLines(
-            RemoteDebuggerAgentStub.ProfilerLogBuffer,
-            pos + RemoteDebuggerAgentStub.ProfilerLogBuffer.length);
-        },
-        100);
-  } else {
-    setTimeout(function() { RemoteDebuggerAgent.DidGetLogLines('', pos); }, 100);
+
+RemoteDebuggerAgentStub.prototype.GetNextLogLines = function() {
+  var profModules = devtools.DebuggerAgent.ProfilerModules;
+  var logLines = '';
+  if (this.activeProfilerModules_ & profModules.PROFILER_MODULE_CPU) {
+    if (this.profileLogPos_ < RemoteDebuggerAgentStub.ProfilerLogBuffer.length) {
+      this.profileLogPos_ += RemoteDebuggerAgentStub.ProfilerLogBuffer.length;
+      logLines += RemoteDebuggerAgentStub.ProfilerLogBuffer;
+    }
   }
-};
-
-/**
- * @constructor
- */
-RemoteDomAgentStub = function() {
-};
-
-
-RemoteDomAgentStub.sendDocumentElement_ = function() {
-  RemoteDomAgent.SetDocumentElement([
-    1,       // id
-    1,       // type = Node.ELEMENT_NODE,
-    'HTML',  // nodeName
-    '',      // nodeValue
-    ['foo','bar'],  // attributes
-    2,       // childNodeCount
-  ]);
-};
-
-
-RemoteDomAgentStub.sendChildNodes_ = function(id) {
-  if (id == 1) {
-    RemoteDomAgent.SetChildNodes(id,
-      [
-        [
-         2,       // id
-         1,       // type = Node.ELEMENT_NODE,
-         'DIV',   // nodeName
-         '',      // nodeValue
-         ['foo','bar'],  // attributes
-         1,       // childNodeCount
-        ],
-        [
-         3,  // id
-         3,  // type = Node.TEXT_NODE,
-         '', // nodeName
-         'Text', // nodeValue
-        ]
-      ]);
-  } else if (id == 2) {
-    RemoteDomAgent.SetChildNodes(id,
-      [
-        [
-        4,       // id
-        1,       // type = Node.ELEMENT_NODE,
-        'span',   // nodeName
-        '',      // nodeValue
-        ['foo','bar'],  // attributes
-        0,       // childNodeCount
-      ]
-    ]);
+  if (this.heapProfLog_) {
+    logLines += this.heapProfLog_;
+    this.heapProfLog_ = '';
   }
-};
-
-
-RemoteDomAgentStub.prototype.GetDocumentElement = function(callId) {
   setTimeout(function() {
-    RemoteDomAgentStub.sendDocumentElement_();
-  }, 0);
-};
-
-
-RemoteDomAgentStub.prototype.GetChildNodes = function(callId, id) {
-  setTimeout(function() {
-    RemoteDomAgentStub.sendChildNodes_(id);
-    RemoteDomAgent.DidGetChildNodes(callId);
-  }, 0);
-};
-
-
-RemoteDomAgentStub.prototype.SetAttribute = function(callId) {
-  setTimeout(function() {
-    RemoteDomAgent.DidApplyDomChange(callId, true);
-  }, 0);
-};
-
-
-RemoteDomAgentStub.prototype.RemoveAttribute = function(callId) {
-  setTimeout(function() {
-    RemoteDomAgent.DidApplyDomChange(callId, true);
-  }, 0);
-};
-
-
-RemoteDomAgentStub.prototype.SetTextNodeValue = function(callId) {
-  setTimeout(function() {
-    RemoteDomAgent.DidApplyDomChange(callId, true);
-  }, 0);
-};
-
-
-RemoteDomAgentStub.prototype.PerformSearch = function(callId, query) {
-  setTimeout(function() {
-    RemoteDomAgent.DidPerformSearch(callId, [1]);
-  }, 0);
-};
-
-
-RemoteDomAgentStub.prototype.DiscardBindings = function() {
+    RemoteDebuggerAgent.DidGetNextLogLines(logLines);
+  }, 100);
 };
 
 
@@ -174,7 +118,7 @@ RemoteToolsAgentStub.prototype.EvaluateJavaScript = function(callId, script) {
 
 
 RemoteToolsAgentStub.prototype.ExecuteUtilityFunction = function(callId,
-    functionName, nodeId, args) {
+    functionName, args) {
   setTimeout(function() {
     var result = [];
     if (functionName == 'getProperties') {
@@ -207,7 +151,16 @@ RemoteToolsAgentStub.prototype.ExecuteUtilityFunction = function(callId,
     } else if (functionName == 'toggleNodeStyle' ||
         functionName == 'applyStyleText' ||
         functionName == 'setStyleProperty') {
-      alert(functionName + '(' + nodeId + ', ' + args + ')');
+      alert(functionName + '(' + args + ')');
+    } else if (functionName == 'evaluate') {
+      try {
+        result = [ window.eval(JSON.parse(args)[0]), false ];
+      } catch (e) {
+        result = [ e.toString(), true ];
+      }
+    } else if (functionName == 'InspectorController' ||
+        functionName == 'InjectedScript') {
+      // do nothing;
     } else {
       alert('Unexpected utility function:' + functionName);
     }
@@ -217,19 +170,24 @@ RemoteToolsAgentStub.prototype.ExecuteUtilityFunction = function(callId,
 };
 
 
-RemoteToolsAgentStub.prototype.GetNodePrototypes = function(callId, nodeId) {
-  setTimeout(function() {
-    RemoteToolsAgent.DidGetNodePrototypes(callId,
-        JSON.stringify());
-  }, 0);
+RemoteToolsAgentStub.prototype.ExecuteVoidJavaScript = function() {
 };
 
 
-RemoteToolsAgentStub.prototype.ClearConsoleMessages = function() {
+RemoteToolsAgentStub.prototype.SetResourceTrackingEnabled = function(enabled, always) {
+  RemoteToolsAgent.SetResourcesPanelEnabled(enabled);
+  if (enabled) {
+    WebInspector.resourceTrackingWasEnabled();
+  } else {
+    WebInspector.resourceTrackingWasDisabled();
+  }
+  addDummyResource();
 };
 
 
 RemoteDebuggerAgentStub.ProfilerLogBuffer =
+  'profiler,begin,1\n' +
+  'profiler,resume\n' +
   'code-creation,LazyCompile,0x1000,256,"test1 http://aaa.js:1"\n' +
   'code-creation,LazyCompile,0x2000,256,"test2 http://bbb.js:2"\n' +
   'code-creation,LazyCompile,0x3000,256,"test3 http://ccc.js:3"\n' +
@@ -240,7 +198,18 @@ RemoteDebuggerAgentStub.ProfilerLogBuffer =
   'tick,0x2020,0x0,3,0x1010\n' +
   'tick,0x2030,0x0,3,0x2020, 0x1010\n' +
   'tick,0x2020,0x0,3,0x1010\n' +
-  'tick,0x1010,0x0,3\n';
+  'tick,0x1010,0x0,3\n' +
+  'profiler,pause\n';
+
+
+RemoteDebuggerAgentStub.HeapSamples = [
+    {foo: [1, 100], bar: [20, 2000]},
+    {foo: [2000, 200000], bar: [10, 1000]},
+    {foo: [15, 1500], bar: [15, 1500]},
+    {bar: [20, 2000]},
+    {foo: [15, 1500], bar: [15, 1500]},
+    {bar: [20, 2000], baz: [15, 1500]}
+];
 
 
 /**
@@ -251,13 +220,37 @@ RemoteDebuggerCommandExecutorStub = function() {
 
 
 RemoteDebuggerCommandExecutorStub.prototype.DebuggerCommand = function(cmd) {
+  if ('{"seq":2,"type":"request","command":"scripts","arguments":{"' +
+      'includeSource":false}}' == cmd) {
+    var response1 =
+        '{"seq":5,"request_seq":2,"type":"response","command":"scripts","' +
+        'success":true,"body":[{"handle":61,"type":"script","name":"' +
+        'http://www/~test/t.js","id":59,"lineOffset":0,"columnOffset":0,' +
+        '"lineCount":1,"sourceStart":"function fib(n) {","sourceLength":300,' +
+        '"scriptType":2,"compilationType":0,"context":{"ref":60}}],"refs":[{' +
+        '"handle":60,"type":"context","data":{"type":"page","value":3}}],' +
+        '"running":false}';
+    this.sendResponse_(response1);
+  } else if ('{"seq":3,"type":"request","command":"scripts","arguments":{' +
+             '"ids":[59],"includeSource":true}}' == cmd) {
+    this.sendResponse_(
+        '{"seq":8,"request_seq":3,"type":"response","command":"scripts",' +
+        '"success":true,"body":[{"handle":1,"type":"script","name":' +
+        '"http://www/~test/t.js","id":59,"lineOffset":0,"columnOffset":0,' +
+        '"lineCount":1,"source":"function fib(n) {return n+1;}",' +
+        '"sourceLength":244,"scriptType":2,"compilationType":0,"context":{' +
+        '"ref":0}}],"refs":[{"handle":0,"type":"context","data":{"type":' +
+        '"page","value":3}}],"running":false}');
+  } else {
+    debugPrint('Unexpected command: ' + cmd);
+  }
 };
 
 
-/**
- * @constructor
- */
-RemoteNetAgentStub = function() {
+RemoteDebuggerCommandExecutorStub.prototype.sendResponse_ = function(response) {
+  setTimeout(function() {
+    RemoteDebuggerAgent.DebuggerOutput(response);
+  }, 0);
 };
 
 
@@ -265,15 +258,71 @@ RemoteNetAgentStub = function() {
  * @constructor
  */
 DevToolsHostStub = function() {
+  this.isStub = true;
+  window.domAutomationController = {
+    send: function(text) {
+        debugPrint(text);
+    }
+  };
 };
 
 
+function addDummyResource() {
+  var payload = {
+    requestHeaders : {},
+    requestURL: 'http://google.com/simple_page.html',
+    host: 'google.com',
+    path: 'simple_page.html',
+    lastPathComponent: 'simple_page.html',
+    isMainResource: true,
+    cached: false,
+    mimeType: 'text/html',
+    suggestedFilename: 'simple_page.html',
+    expectedContentLength: 10000,
+    statusCode: 200,
+    contentLength: 10000,
+    responseHeaders: {},
+    type: WebInspector.Resource.Type.Document,
+    finished: true,
+    startTime: new Date(),
+
+    didResponseChange: true,
+    didCompletionChange: true,
+    didTypeChange: true
+  };
+
+  WebInspector.addResource(1, payload);
+  WebInspector.updateResource(1, payload);
+}
+
+
 DevToolsHostStub.prototype.loaded = function() {
-  RemoteDomAgentStub.sendDocumentElement_();
-  RemoteDomAgentStub.sendChildNodes_(1);
-  RemoteDomAgentStub.sendChildNodes_(2);
-  devtools.tools.updateFocusedNode(4);
-  devtools.tools.addMessageToConsole('message', 'source', 3);
+  addDummyResource();
+  uiTests.runAllTests();
+};
+
+
+DevToolsHostStub.prototype.reset = function() {
+};
+
+
+DevToolsHostStub.prototype.getPlatform = function() {
+  return "windows";
+};
+
+
+DevToolsHostStub.prototype.addResourceSourceToFrame = function(
+    identifier, mimeType, element) {
+};
+
+
+DevToolsHostStub.prototype.addSourceToFrame = function(mimeType, source,
+    element) {
+};
+
+
+DevToolsHostStub.prototype.getApplicationLocale = function() {
+  return "en-US";
 };
 
 
@@ -281,8 +330,6 @@ if (!window['DevToolsHost']) {
   window['RemoteDebuggerAgent'] = new RemoteDebuggerAgentStub();
   window['RemoteDebuggerCommandExecutor'] =
       new RemoteDebuggerCommandExecutorStub();
-  window['RemoteDomAgent'] = new RemoteDomAgentStub();
-  window['RemoteNetAgent'] = new RemoteNetAgentStub();
   window['RemoteToolsAgent'] = new RemoteToolsAgentStub();
   window['DevToolsHost'] = new DevToolsHostStub();
 }

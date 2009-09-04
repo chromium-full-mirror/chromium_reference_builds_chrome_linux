@@ -16,12 +16,12 @@ goog.provide('devtools.InspectorController');
  * Creates inspector controller stub instance.
  * @constructor.
  */
-devtools.InspectorController = function() {  
+devtools.InspectorController = function() {
   /**
    * @type {boolean}
    */
   this.searchingForNode_ = false;
-  
+
   /**
    * @type {boolean}
    */
@@ -41,6 +41,16 @@ devtools.InspectorController = function() {
    * @type {boolean}
    */
   this.profilerEnabled_ = true;
+
+  /**
+   * @type {boolean}
+   */
+  this.resourceTrackingEnabled_ = false;
+
+  /**
+   * @type {boolean}
+   */
+  this.timelineEnabled_ = false;
 };
 
 
@@ -66,8 +76,8 @@ devtools.InspectorController.prototype.isWindowVisible = function() {
 /**
  * @return {string} Platform identifier.
  */
-devtools.InspectorController.prototype.platform = function() { 
-  return 'windows'; 
+devtools.InspectorController.prototype.platform = function() {
+  return 'windows';
 };
 
 
@@ -90,6 +100,14 @@ devtools.InspectorController.prototype.attach = function() {
  * Detaches frontend from the backend.
  */
 devtools.InspectorController.prototype.detach = function() {
+};
+
+
+/**
+ * Tell host that the active panel has changed.
+ * @param {string} panel Panel name that was last active.
+ */
+devtools.InspectorController.prototype.storeLastActivePanel = function(panel) {
 };
 
 
@@ -152,7 +170,6 @@ devtools.InspectorController.prototype.moveByUnrestricted = function(x, y) {
  */
 devtools.InspectorController.prototype.addResourceSourceToFrame =
     function(identifier, element) {
-  return false;
 };
 
 
@@ -215,7 +232,7 @@ devtools.InspectorController.prototype.loaded = function() {
  * @return {string} Url of the i18n-ed strings map.
  */
 devtools.InspectorController.prototype.localizedStringsURL = function() {
-  return undefined; 
+  return undefined;
 };
 
 
@@ -238,8 +255,59 @@ devtools.InspectorController.prototype.hiddenPanels = function() {
 /**
  * @return {boolean} True iff debugger is enabled.
  */
-devtools.InspectorController.prototype.debuggerEnabled = function() { 
+devtools.InspectorController.prototype.debuggerEnabled = function() {
   return this.debuggerEnabled_;
+};
+
+
+/**
+ * Enables resource tracking.
+ */
+devtools.InspectorController.prototype.enableResourceTracking = function() {
+  this.resourceTrackingEnabled_ = true;
+  WebInspector.resourceTrackingWasEnabled();
+};
+
+
+/**
+ * Disables resource tracking.
+ */
+devtools.InspectorController.prototype.disableResourceTracking = function() {
+  this.resourceTrackingEnabled_ = false;
+  WebInspector.resourceTrackingWasDisabled();
+};
+
+
+/**
+ * @return {boolean} True iff resource tracking is enabled.
+ */
+devtools.InspectorController.prototype.resourceTrackingEnabled = function() {
+  return this.resourceTrackingEnabled_;
+};
+
+
+/**
+ * Enables timeline.
+ */
+devtools.InspectorController.prototype.enableTimeline = function() {
+  this.timelineEnabled_ = true;
+  WebInspector.timelineWasEnabled();
+};
+
+
+/**
+ * Disables timeline.
+ */
+devtools.InspectorController.prototype.disableTimeline = function() {
+  this.timelineEnabled_ = false;
+  WebInspector.timelineWasDisabled();
+};
+
+/**
+ * @return {boolean} True iff timeline is enabled.
+ */
+devtools.InspectorController.prototype.timelineEnabled = function() {
+  return this.timelineEnabled_;
 };
 
 
@@ -263,9 +331,10 @@ devtools.InspectorController.prototype.disableDebugger = function() {
  * Adds breakpoint to the given line of the source with given ID.
  * @param {string} sourceID Source Id to add breakpoint to.
  * @param {number} line Line number to add breakpoint to.
+ * @param {?string} condition The breakpoint condition.
  */
 devtools.InspectorController.prototype.addBreakpoint =
-    function(sourceID, line) {
+    function(sourceID, line, condition) {
 };
 
 
@@ -276,6 +345,17 @@ devtools.InspectorController.prototype.addBreakpoint =
  */
 devtools.InspectorController.prototype.removeBreakpoint =
     function(sourceID, line) {
+};
+
+
+/**
+ * Sets a breakpoint condition given a line of the source and an ID.
+ * @param {string} sourceID Source Id to remove breakpoint from.
+ * @param {number} line Line number to remove breakpoint from.
+ * @param {?string} condition New breakpoint condition.
+ */
+devtools.InspectorController.prototype.updateBreakpoint =
+    function(sourceID, line, condition) {
 };
 
 
@@ -291,7 +371,7 @@ devtools.InspectorController.prototype.pauseInDebugger = function() {
  * @return {boolean} True iff the debugger will pause execution on the
  * exceptions.
  */
-devtools.InspectorController.prototype.pauseOnExceptions = function() { 
+devtools.InspectorController.prototype.pauseOnExceptions = function() {
   // Does nothing in stub.
   return false;
 };
@@ -316,8 +396,8 @@ devtools.InspectorController.prototype.resumeDebugger = function() {
 /**
  * @return {boolean} True iff profiler is enabled.
  */
-devtools.InspectorController.prototype.profilerEnabled = function() { 
-  return true; 
+devtools.InspectorController.prototype.profilerEnabled = function() {
+  return true;
 };
 
 
@@ -363,8 +443,8 @@ devtools.InspectorController.prototype.stopProfiling = function() {
 /**
  * @return {Array.<Object>} Profile snapshots array.
  */
-devtools.InspectorController.prototype.profiles = function() { 
-  return []; 
+devtools.InspectorController.prototype.profiles = function() {
+  return [];
 };
 
 
@@ -398,3 +478,5 @@ devtools.InspectorController.prototype.stepOutOfFunctionInDebugger =
 devtools.InspectorController.prototype.stepOverStatementInDebugger =
     function() {
 };
+
+var InspectorController = new devtools.InspectorController();
