@@ -1891,6 +1891,12 @@ body.inactive .placard.selected {
     text-decoration: none !important;
 }
 
+.child-editing {
+    color: black !important;
+    text-decoration: none !important;
+    overflow: visible !important;
+}
+
 .editing br {
     display: none;
 }
