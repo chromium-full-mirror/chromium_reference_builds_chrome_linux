@@ -121,10 +121,6 @@
     margin-right: -10px;
 }
 
-.webkit-line-content {
-    padding-left: 2px;
-}
-
 .webkit-breakpoint .webkit-line-number-outer {
     color: white;
     border-width: 0 14px 0px 2px;
@@ -175,21 +171,6 @@
     outline: 1px solid rgb(64, 115, 244);
 }
 
-.diff-container .webkit-added-line.webkit-line-number {
-    background-color: rgb(170, 255, 170);
-    color: #333;
-}
-
-.diff-container .webkit-removed-line.webkit-line-number {
-    background-color: rgb(255, 220, 220);
-    text-decoration: line-through;
-}
-
-.diff-container .webkit-changed-line.webkit-line-number {
-    background-color: rgb(170, 170, 255);
-    color: #333;
-}
-
 .webkit-highlighted-line.webkit-line-content {
     -webkit-animation: "fadeout" 2s 0s;
 }
@@ -197,4 +178,20 @@
 @-webkit-keyframes fadeout {
     from {background-color: rgb(255, 255, 120); }
     to { background-color: white; }
+}
+
+.debug-fadeout {
+    -webkit-animation: "debug-fadeout" 1s 0s;
+    border: 1px solid white;
+}
+
+@-webkit-keyframes debug-fadeout {
+    from {
+        border-color: black;
+        background-color: rgb(255, 255, 120);
+    }
+    to {
+        background-color: white;
+        border-color: white
+    }
 }

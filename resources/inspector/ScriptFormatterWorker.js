@@ -190,7 +190,8 @@ this._tokenizers = {};
 this._tokenizerConstructors = {
 "text/css": "SourceCSSTokenizer",
 "text/html": "SourceHTMLTokenizer",
-"text/javascript": "SourceJavaScriptTokenizer"
+"text/javascript": "SourceJavaScriptTokenizer",
+"text/x-scss": "SourceCSSTokenizer"
 };
 }
 
@@ -995,22 +996,11 @@ if (yych == ']') { gotoCase = 99; continue; };
 }
 
 }
-}
-}
+},
 
-WebInspector.SourceHTMLTokenizer.prototype.__proto__ = WebInspector.SourceTokenizer.prototype;
+__proto__: WebInspector.SourceTokenizer.prototype
+}
 ;
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1214,7 +1204,15 @@ case 17:
 if ((yych = this._charAt(cursor)) == '=') { gotoCase = 115; continue; };
 case 18:
 this.setLexCondition(this._lexConditions.NODIV);
-{ this.tokenType = null; return cursor; }
+{
+var token = this._line.charAt(cursorOnEnter);
+if (token === "{")
+this.tokenType = "block-start";
+else if (token === "}")
+this.tokenType = "block-end";
+else this.tokenType = null;
+return cursor;
+}
 case 19:
 yyaccept = 0;
 yych = this._charAt(YYMARKER = ++cursor);
@@ -2145,7 +2143,15 @@ case 138:
 ++cursor;
 if ((yych = this._charAt(cursor)) == '=') { gotoCase = 260; continue; };
 case 139:
-{ this.tokenType = null; return cursor; }
+{
+var token = this._line.charAt(cursorOnEnter);
+if (token === "{")
+this.tokenType = "block-start";
+else if (token === "}")
+this.tokenType = "block-end";
+else this.tokenType = null;
+return cursor;
+}
 case 140:
 yyaccept = 0;
 yych = this._charAt(YYMARKER = ++cursor);
@@ -3392,10 +3398,10 @@ yych = this._charAt(cursor);
 }
 
 }
-}
-}
+},
 
-WebInspector.SourceJavaScriptTokenizer.prototype.__proto__ = WebInspector.SourceTokenizer.prototype;
+__proto__: WebInspector.SourceTokenizer.prototype
+}
 ;
 
 HTMLScriptFormatter = function(indentString)
@@ -3448,10 +3454,10 @@ styleSheetStarted: function(cursor)
 
 styleSheetEnded: function(cursor)
 {
-}
-}
+},
 
-HTMLScriptFormatter.prototype.__proto__ = WebInspector.SourceHTMLTokenizer.prototype;
+__proto__: WebInspector.SourceHTMLTokenizer.prototype
+}
 
 function require()
 {

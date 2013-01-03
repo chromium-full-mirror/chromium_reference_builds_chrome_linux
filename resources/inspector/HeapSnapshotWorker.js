@@ -7,32 +7,6 @@ WebInspector.UIString = function(s) { return s; };
 
 
 
-WebInspector.Uint32Array = function(size)
-{
-const preallocateSize = 1000;
-size = size || preallocateSize;
-this._usedSize = 0;
-this._array = new Uint32Array(preallocateSize);
-}
-
-WebInspector.Uint32Array.prototype = {
-push: function(value)
-{
-if (this._usedSize + 1 > this._array.length) {
-var tempArray = new Uint32Array(this._array.length * 2);
-tempArray.set(this._array);
-this._array = tempArray;
-}
-this._array[this._usedSize++] = value;
-},
-
-get array()
-{
-return this._array.subarray(0, this._usedSize);
-}
-}
-
-
 WebInspector.HeapSnapshotArraySlice = function(array, start, end)
 {
 this._array = array;
@@ -68,106 +42,51 @@ clone: function()
 return new WebInspector.HeapSnapshotEdge(this._snapshot, this._edges, this.edgeIndex);
 },
 
-get hasStringName()
+hasStringName: function()
 {
-if (!this.isShortcut)
-return this._hasStringName;
-return isNaN(parseInt(this._name, 10));
+throw new Error("Not implemented");
 },
 
-get isElement()
+name: function()
 {
-return this._type() === this._snapshot._edgeElementType;
+throw new Error("Not implemented");
 },
 
-get isHidden()
+node: function()
 {
-return this._type() === this._snapshot._edgeHiddenType;
+return this._snapshot.createNode(this.nodeIndex());
 },
 
-get isWeak()
-{
-return this._type() === this._snapshot._edgeWeakType;
-},
-
-get isInternal()
-{
-return this._type() === this._snapshot._edgeInternalType;
-},
-
-get isInvisible()
-{
-return this._type() === this._snapshot._edgeInvisibleType;
-},
-
-get isShortcut()
-{
-return this._type() === this._snapshot._edgeShortcutType;
-},
-
-get name()
-{
-if (!this.isShortcut)
-return this._name;
-var numName = parseInt(this._name, 10);
-return isNaN(numName) ? this._name : numName;
-},
-
-get node()
-{
-return new WebInspector.HeapSnapshotNode(this._snapshot, this.nodeIndex);
-},
-
-get nodeIndex()
+nodeIndex: function()
 {
 return this._edges.item(this.edgeIndex + this._snapshot._edgeToNodeOffset);
 },
 
-get rawEdges()
+rawEdges: function()
 {
 return this._edges;
 },
 
 toString: function()
 {
-switch (this.type) {
-case "context": return "->" + this.name;
-case "element": return "[" + this.name + "]";
-case "weak": return "[[" + this.name + "]]";
-case "property":
-return this.name.indexOf(" ") === -1 ? "." + this.name : "[\"" + this.name + "\"]";
-case "shortcut":
-var name = this.name;
-if (typeof name === "string")
-return this.name.indexOf(" ") === -1 ? "." + this.name : "[\"" + this.name + "\"]";
-else
-return "[" + this.name + "]";
-case "internal":
-case "hidden":
-case "invisible":
-return "{" + this.name + "}";
-};
-return "?" + this.name + "?";
+return "HeapSnapshotEdge: " + this.name();
 },
 
-get type()
+type: function()
 {
 return this._snapshot._edgeTypes[this._type()];
 },
 
-get _hasStringName()
+serialize: function()
 {
-return !this.isElement && !this.isHidden && !this.isWeak;
-},
-
-get _name()
-{
-return this._hasStringName ? this._snapshot._strings[this._nameOrIndex] : this._nameOrIndex;
-},
-
-get _nameOrIndex()
-{
-return this._edges.item(this.edgeIndex + this._snapshot._edgeNameOffset);
+var node = this.node();
+return {
+name: this.name(),
+node: node.serialize(),
+nodeIndex: this.nodeIndex(),
+type: this.type(),
+distance: node.distance()
+};
 },
 
 _type: function()
@@ -183,7 +102,7 @@ this.edge = edge;
 }
 
 WebInspector.HeapSnapshotEdgeIterator.prototype = {
-first: function()
+rewind: function()
 {
 this.edge.edgeIndex = 0;
 },
@@ -193,17 +112,17 @@ hasNext: function()
 return this.edge.edgeIndex < this.edge._edges.length;
 },
 
-get index()
+index: function()
 {
 return this.edge.edgeIndex;
 },
 
-set index(newIndex)
+setIndex: function(newIndex)
 {
 this.edge.edgeIndex = newIndex;
 },
 
-get item()
+item: function()
 {
 return this.edge;
 },
@@ -224,71 +143,41 @@ var retainedNodeOrdinal = retainedNodeIndex / snapshot._nodeFieldCount;
 this._firstRetainer = snapshot._firstRetainerIndex[retainedNodeOrdinal];
 this._retainersCount = snapshot._firstRetainerIndex[retainedNodeOrdinal + 1] - this._firstRetainer;
 
-this.retainerIndex = retainerIndex;
+this.setRetainerIndex(retainerIndex);
 }
 
 WebInspector.HeapSnapshotRetainerEdge.prototype = {
 clone: function()
 {
-return new WebInspector.HeapSnapshotRetainerEdge(this._snapshot, this._retainedNodeIndex, this.retainerIndex);
+return new WebInspector.HeapSnapshotRetainerEdge(this._snapshot, this._retainedNodeIndex, this.retainerIndex());
 },
 
-get hasStringName()
+hasStringName: function()
 {
-return this._edge.hasStringName;
+return this._edge().hasStringName();
 },
 
-get isElement()
+name: function()
 {
-return this._edge.isElement;
+return this._edge().name();
 },
 
-get isHidden()
+node: function()
 {
-return this._edge.isHidden;
+return this._node();
 },
 
-get isInternal()
-{
-return this._edge.isInternal;
-},
-
-get isInvisible()
-{
-return this._edge.isInvisible;
-},
-
-get isShortcut()
-{
-return this._edge.isShortcut;
-},
-
-get isWeak()
-{
-return this._edge.isWeak;
-},
-
-get name()
-{
-return this._edge.name;
-},
-
-get node()
-{
-return this._node;
-},
-
-get nodeIndex()
+nodeIndex: function()
 {
 return this._nodeIndex;
 },
 
-get retainerIndex()
+retainerIndex: function()
 {
 return this._retainerIndex;
 },
 
-set retainerIndex(newIndex)
+setRetainerIndex: function(newIndex)
 {
 if (newIndex !== this._retainerIndex) {
 this._retainerIndex = newIndex;
@@ -305,30 +194,42 @@ delete this._edgeInstance;
 delete this._nodeInstance;
 },
 
-get _node()
+_node: function()
 {
 if (!this._nodeInstance)
-this._nodeInstance = new WebInspector.HeapSnapshotNode(this._snapshot, this._nodeIndex);
+this._nodeInstance = this._snapshot.createNode(this._nodeIndex);
 return this._nodeInstance;
 },
 
-get _edge()
+_edge: function()
 {
 if (!this._edgeInstance) {
-var edgeIndex = this._globalEdgeIndex - this._node._edgeIndexesStart();
-this._edgeInstance = new WebInspector.HeapSnapshotEdge(this._snapshot, this._node.rawEdges, edgeIndex);
+var edgeIndex = this._globalEdgeIndex - this._node()._edgeIndexesStart();
+this._edgeInstance = this._snapshot.createEdge(this._node().rawEdges(), edgeIndex);
 }
 return this._edgeInstance;
 },
 
 toString: function()
 {
-return this._edge.toString();
+return this._edge().toString();
 },
 
-get type()
+serialize: function()
 {
-return this._edge.type;
+var node = this.node();
+return {
+name: this.name(),
+node: node.serialize(),
+nodeIndex: this.nodeIndex(),
+type: this.type(),
+distance: node.distance()
+};
+},
+
+type: function()
+{
+return this._edge().type();
 }
 }
 
@@ -339,34 +240,34 @@ this.retainer = retainer;
 }
 
 WebInspector.HeapSnapshotRetainerEdgeIterator.prototype = {
-first: function()
+rewind: function()
 {
-this.retainer.retainerIndex = 0;
+this.retainer.setRetainerIndex(0);
 },
 
 hasNext: function()
 {
-return this.retainer.retainerIndex < this.retainer._retainersCount;
+return this.retainer.retainerIndex() < this.retainer._retainersCount;
 },
 
-get index()
+index: function()
 {
-return this.retainer.retainerIndex;
+return this.retainer.retainerIndex();
 },
 
-set index(newIndex)
+setIndex: function(newIndex)
 {
-this.retainer.retainerIndex = newIndex;
+this.retainer.setRetainerIndex(newIndex);
 },
 
-get item()
+item: function()
 {
 return this.retainer;
 },
 
 next: function()
 {
-++this.retainer.retainerIndex;
+this.retainer.setRetainerIndex(this.retainer.retainerIndex() + 1);
 }
 };
 
@@ -379,167 +280,127 @@ this.nodeIndex = nodeIndex;
 }
 
 WebInspector.HeapSnapshotNode.prototype = {
-get canBeQueried()
+isUserObject: function()
 {
-var flags = this._snapshot._flagsOfNode(this);
-return !!(flags & this._snapshot._nodeFlags.canBeQueried);
+return true;
 },
 
-get distanceToWindow()
+distance: function()
 {
-return this._snapshot._distancesToWindow[this.nodeIndex];
+return this._snapshot._nodeDistances[this.nodeIndex / this._snapshot._nodeFieldCount];
 },
 
-get className()
+className: function()
 {
-switch (this.type) {
-case "hidden":
-return WebInspector.UIString("(system)");
-case "object":
-case "native":
-return this.name;
-case "code":
-return WebInspector.UIString("(compiled code)");
-default:
-return "(" + this.type + ")";
-}
+throw new Error("Not implemented");
 },
 
-get classIndex()
+classIndex: function()
 {
-var type = this._type();
-switch (type) {
-case this._snapshot._nodeObjectType:
-case this._snapshot._nodeNativeType:
-return this._name();
-default:
-return -1 - type;
-}
+throw new Error("Not implemented");
 },
 
-get dominatorIndex()
+dominatorIndex: function()
 {
-return this._nodes[this.nodeIndex + this._snapshot._dominatorOffset];
+var nodeFieldCount = this._snapshot._nodeFieldCount;
+return this._snapshot._dominatorsTree[this.nodeIndex / this._snapshot._nodeFieldCount] * nodeFieldCount;
 },
 
-get edges()
+edges: function()
 {
-return new WebInspector.HeapSnapshotEdgeIterator(new WebInspector.HeapSnapshotEdge(this._snapshot, this.rawEdges));
+return new WebInspector.HeapSnapshotEdgeIterator(this._snapshot.createEdge(this.rawEdges(), 0));
 },
 
-get edgesCount()
+edgesCount: function()
 {
 return (this._edgeIndexesEnd() - this._edgeIndexesStart()) / this._snapshot._edgeFieldsCount;
 },
 
-get flags()
+id: function()
 {
-return this._snapshot._flagsOfNode(this);
+throw new Error("Not implemented");
 },
 
-get id()
-{
-return this._nodes[this.nodeIndex + this._snapshot._nodeIdOffset];
-},
-
-get isHidden()
-{
-return this._type() === this._snapshot._nodeHiddenType;
-},
-
-get isNative()
-{
-return this._type() === this._snapshot._nodeNativeType;
-},
-
-get isSynthetic()
-{
-return this._type() === this._snapshot._nodeSyntheticType;
-},
-
-get isWindow()
-{
-const windowRE = /^Window/;
-return windowRE.test(this.name);
-},
-
-get isDetachedDOMTreesRoot()
-{
-return this.name === "(Detached DOM trees)";
-},
-
-get isDetachedDOMTree()
-{
-const detachedDOMTreeRE = /^Detached DOM tree/;
-return detachedDOMTreeRE.test(this.className);
-},
-
-get isRoot()
+isRoot: function()
 {
 return this.nodeIndex === this._snapshot._rootNodeIndex;
 },
 
-get name()
+name: function()
 {
 return this._snapshot._strings[this._name()];
 },
 
-get rawEdges()
+rawEdges: function()
 {
 return new WebInspector.HeapSnapshotArraySlice(this._snapshot._containmentEdges, this._edgeIndexesStart(), this._edgeIndexesEnd());
 },
 
-get retainedSize()
+retainedSize: function()
 {
-return this._nodes[this.nodeIndex + this._snapshot._nodeRetainedSizeOffset];
+var snapshot = this._snapshot;
+return snapshot._nodes[this.nodeIndex + snapshot._nodeRetainedSizeOffset];
 },
 
-get retainers()
+retainers: function()
 {
-return new WebInspector.HeapSnapshotRetainerEdgeIterator(new WebInspector.HeapSnapshotRetainerEdge(this._snapshot, this.nodeIndex, 0));
+return new WebInspector.HeapSnapshotRetainerEdgeIterator(this._snapshot.createRetainingEdge(this.nodeIndex, 0));
 },
 
-get selfSize()
+selfSize: function()
 {
-return this._nodes[this.nodeIndex + this._snapshot._nodeSelfSizeOffset];
+var snapshot = this._snapshot;
+return snapshot._nodes[this.nodeIndex + snapshot._nodeSelfSizeOffset];
 },
 
-get type()
+type: function()
 {
 return this._snapshot._nodeTypes[this._type()];
 },
 
-_name: function()
+serialize: function()
 {
-return this._nodes[this.nodeIndex + this._snapshot._nodeNameOffset];
+return {
+id: this.id(),
+name: this.name(),
+distance: this.distance(),
+nodeIndex: this.nodeIndex,
+retainedSize: this.retainedSize(),
+selfSize: this.selfSize(),
+type: this.type(),
+};
 },
 
-get _nodes()
+_name: function()
 {
-return this._snapshot._nodes;
+var snapshot = this._snapshot;
+return snapshot._nodes[this.nodeIndex + snapshot._nodeNameOffset];
 },
 
 _edgeIndexesStart: function()
 {
-return this._snapshot._nodes[this.nodeIndex + this._snapshot._firstEdgeIndexOffset];
+return this._snapshot._firstEdgeIndexes[this._ordinal()];
 },
 
 _edgeIndexesEnd: function()
 {
-var nextNodeIndex = this._nextNodeIndex;
-if (nextNodeIndex < this._snapshot._nodes.length)
-return this._snapshot._nodes[nextNodeIndex + this._snapshot._firstEdgeIndexOffset]
-return this._snapshot._containmentEdges.length;
+return this._snapshot._firstEdgeIndexes[this._ordinal() + 1];
 },
 
-get _nextNodeIndex()
+_ordinal: function()
+{
+return this.nodeIndex / this._snapshot._nodeFieldCount;
+},
+
+_nextNodeIndex: function()
 {
 return this.nodeIndex + this._snapshot._nodeFieldCount;
 },
 
 _type: function()
 {
-return this._nodes[this.nodeIndex + this._snapshot._nodeTypeOffset];
+var snapshot = this._snapshot;
+return snapshot._nodes[this.nodeIndex + snapshot._nodeTypeOffset];
 }
 };
 
@@ -547,37 +408,38 @@ return this._nodes[this.nodeIndex + this._snapshot._nodeTypeOffset];
 WebInspector.HeapSnapshotNodeIterator = function(node)
 {
 this.node = node;
+this._nodesLength = node._snapshot._nodes.length;
 }
 
 WebInspector.HeapSnapshotNodeIterator.prototype = {
-first: function()
+rewind: function()
 {
 this.node.nodeIndex = this.node._firstNodeIndex;
 },
 
 hasNext: function()
 {
-return this.node.nodeIndex < this.node._nodes.length;
+return this.node.nodeIndex < this._nodesLength;
 },
 
-get index()
+index: function()
 {
 return this.node.nodeIndex;
 },
 
-set index(newIndex)
+setIndex: function(newIndex)
 {
 this.node.nodeIndex = newIndex;
 },
 
-get item()
+item: function()
 {
 return this.node;
 },
 
 next: function()
 {
-this.node.nodeIndex = this.node._nextNodeIndex;
+this.node.nodeIndex = this.node._nextNodeIndex();
 }
 }
 
@@ -632,9 +494,7 @@ this._nodeTypeOffset = meta.node_fields.indexOf("type");
 this._nodeNameOffset = meta.node_fields.indexOf("name");
 this._nodeIdOffset = meta.node_fields.indexOf("id");
 this._nodeSelfSizeOffset = meta.node_fields.indexOf("self_size");
-this._nodeRetainedSizeOffset = meta.node_fields.indexOf("retained_size");
-this._dominatorOffset = meta.node_fields.indexOf("dominator");
-this._firstEdgeIndexOffset = meta.node_fields.indexOf("edges_index");
+this._nodeEdgeCountOffset = meta.node_fields.indexOf("edge_count");
 this._nodeFieldCount = meta.node_fields.length;
 
 this._nodeTypes = meta.node_types[this._nodeTypeOffset];
@@ -658,20 +518,34 @@ this._edgeShortcutType = this._edgeTypes.indexOf("shortcut");
 this._edgeWeakType = this._edgeTypes.indexOf("weak");
 this._edgeInvisibleType = this._edgeTypes.indexOf("invisible");
 
-this._nodeFlags = { 
-canBeQueried: 1,
-detachedDOMTreeNode: 2,
-};
-
 this.nodeCount = this._nodes.length / this._nodeFieldCount;
 this._edgeCount = this._containmentEdges.length / this._edgeFieldsCount;
 
+this._buildEdgeIndexes();
 this._markInvisibleEdges();
 this._buildRetainers();
-if (this._dominatorOffset !== -1) 
-this._buildDominatedNodes()
 this._calculateFlags();
-this._calculateObjectToWindowDistance();
+this._calculateDistances();
+var result = this._buildPostOrderIndex();
+
+this._dominatorsTree = this._buildDominatorTree(result.postOrderIndex2NodeOrdinal, result.nodeOrdinal2PostOrderIndex);
+this._calculateRetainedSizes(result.postOrderIndex2NodeOrdinal);
+this._buildDominatedNodes();
+},
+
+_buildEdgeIndexes: function()
+{
+var nodes = this._nodes;
+var nodeCount = this.nodeCount;
+var firstEdgeIndexes = this._firstEdgeIndexes = new Uint32Array(nodeCount + 1);
+var nodeFieldCount = this._nodeFieldCount;
+var edgeFieldsCount = this._edgeFieldsCount;
+var nodeEdgeCountOffset = this._nodeEdgeCountOffset;
+firstEdgeIndexes[nodeCount] = this._containmentEdges.length;
+for (var nodeOrdinal = 0, edgeIndex = 0; nodeOrdinal < nodeCount; ++nodeOrdinal) {
+firstEdgeIndexes[nodeOrdinal] = edgeIndex;
+edgeIndex += nodes[nodeOrdinal * nodeFieldCount + nodeEdgeCountOffset] * edgeFieldsCount;
+}
 },
 
 _buildRetainers: function()
@@ -687,7 +561,8 @@ var edgeFieldsCount = this._edgeFieldsCount;
 var nodeFieldCount = this._nodeFieldCount;
 var edgeToNodeOffset = this._edgeToNodeOffset;
 var nodes = this._nodes;
-var firstEdgeIndexOffset = this._firstEdgeIndexOffset;
+var firstEdgeIndexes = this._firstEdgeIndexes;
+var nodeCount = this.nodeCount;
 
 for (var toNodeFieldIndex = edgeToNodeOffset, l = containmentEdges.length; toNodeFieldIndex < l; toNodeFieldIndex += edgeFieldsCount) {
 var toNodeIndex = containmentEdges[toNodeFieldIndex];
@@ -695,23 +570,19 @@ if (toNodeIndex % nodeFieldCount)
 throw new Error("Invalid toNodeIndex " + toNodeIndex);
 ++firstRetainerIndex[toNodeIndex / nodeFieldCount];
 }
-for (var i = 0, firstUnusedRetainerSlot = 0, l = this.nodeCount; i < l; i++) {
+for (var i = 0, firstUnusedRetainerSlot = 0; i < nodeCount; i++) {
 var retainersCount = firstRetainerIndex[i];
 firstRetainerIndex[i] = firstUnusedRetainerSlot;
 retainingNodes[firstUnusedRetainerSlot] = retainersCount;
 firstUnusedRetainerSlot += retainersCount;
 }
-firstRetainerIndex[this.nodeCount] = retainingNodes.length;
+firstRetainerIndex[nodeCount] = retainingNodes.length;
 
-var srcNodeIndex = 0;
-var nextNodeFirstEdgeIndex = nodes[firstEdgeIndexOffset];
-var nodesLength = nodes.length;
-while (srcNodeIndex < nodesLength) {
+var nextNodeFirstEdgeIndex = firstEdgeIndexes[0];
+for (var srcNodeOrdinal = 0; srcNodeOrdinal < nodeCount; ++srcNodeOrdinal) {
 var firstEdgeIndex = nextNodeFirstEdgeIndex;
-var nextNodeIndex = srcNodeIndex + nodeFieldCount;
-nextNodeFirstEdgeIndex = nextNodeIndex < nodesLength
-? nodes[nextNodeIndex + firstEdgeIndexOffset]
-: containmentEdges.length;
+nextNodeFirstEdgeIndex = firstEdgeIndexes[srcNodeOrdinal + 1];
+var srcNodeIndex = srcNodeOrdinal * nodeFieldCount;
 for (var edgeIndex = firstEdgeIndex; edgeIndex < nextNodeFirstEdgeIndex; edgeIndex += edgeFieldsCount) {
 var toNodeIndex = containmentEdges[edgeIndex + edgeToNodeOffset];
 if (toNodeIndex % nodeFieldCount)
@@ -721,8 +592,23 @@ var nextUnusedRetainerSlotIndex = firstRetainerSlotIndex + (--retainingNodes[fir
 retainingNodes[nextUnusedRetainerSlotIndex] = srcNodeIndex;
 retainingEdges[nextUnusedRetainerSlotIndex] = edgeIndex;
 }
-srcNodeIndex = nextNodeIndex;
 }
+},
+
+
+createNode: function(nodeIndex)
+{
+throw new Error("Not implemented");
+},
+
+createEdge: function(edges, edgeIndex)
+{
+throw new Error("Not implemented");
+},
+
+createRetainingEdge: function(retainedNodeIndex, retainerIndex)
+{
+throw new Error("Not implemented");
 },
 
 dispose: function()
@@ -738,18 +624,18 @@ delete this._aggregatesSortedFlags;
 }
 delete this._dominatedNodes;
 delete this._firstDominatedNodeIndex;
-delete this._flags;
-delete this._distancesToWindow;
+delete this._nodeDistances;
+delete this._dominatorsTree;
 },
 
-get _allNodes()
+_allNodes: function()
 {
-return new WebInspector.HeapSnapshotNodeIterator(this.rootNode);
+return new WebInspector.HeapSnapshotNodeIterator(this.rootNode());
 },
 
-get rootNode()
+rootNode: function()
 {
-return new WebInspector.HeapSnapshotNode(this, this._rootNodeIndex);
+return this.createNode(this._rootNodeIndex);
 },
 
 get rootNodeIndex()
@@ -759,7 +645,7 @@ return this._rootNodeIndex;
 
 get totalSize()
 {
-return this.rootNode.retainedSize;
+return this.rootNode().retainedSize();
 },
 
 _getDominatedIndex: function(nodeIndex)
@@ -772,13 +658,8 @@ return this._firstDominatedNodeIndex[nodeIndex / this._nodeFieldCount];
 _dominatedNodesOfNode: function(node)
 {
 var dominatedIndexFrom = this._getDominatedIndex(node.nodeIndex);
-var dominatedIndexTo = this._getDominatedIndex(node._nextNodeIndex);
+var dominatedIndexTo = this._getDominatedIndex(node._nextNodeIndex());
 return new WebInspector.HeapSnapshotArraySlice(this._dominatedNodes, dominatedIndexFrom, dominatedIndexTo);
-},
-
-_flagsOfNode: function(node)
-{
-return this._flags[node.nodeIndex];
 },
 
 
@@ -823,7 +704,7 @@ return this._aggregatesForDiff;
 var aggregatesByClassName = this.aggregates(true, "allObjects");
 this._aggregatesForDiff  = {};
 
-var node = new WebInspector.HeapSnapshotNode(this);
+var node = this.createNode();
 for (var className in aggregatesByClassName) {
 var aggregate = aggregatesByClassName[className];
 var indexes = aggregate.idxs;
@@ -831,8 +712,8 @@ var ids = new Array(indexes.length);
 var selfSizes = new Array(indexes.length);
 for (var i = 0; i < indexes.length; i++) {
 node.nodeIndex = indexes[i];
-ids[i] = node.id;
-selfSizes[i] = node.selfSize;
+ids[i] = node.id();
+selfSizes[i] = node.selfSize();
 }
 
 this._aggregatesForDiff[className] = {
@@ -844,104 +725,119 @@ selfSizes: selfSizes
 return this._aggregatesForDiff;
 },
 
-_calculateObjectToWindowDistance: function()
+canHaveDistanceOne: function(node)
 {
-this._distancesToWindow = new Array(this.nodeCount);
-
-
-var list = [];
-for (var iter = this.rootNode.edges; iter.hasNext(); iter.next()) {
-var node = iter.edge.node;
-if (node.isWindow) {
-if (node.nodeIndex % this._nodeFieldCount)
-throw new Error("Invalid nodeIndex: " + node.nodeIndex);
-list.push(node.nodeIndex);
-this._distancesToWindow[node.nodeIndex] = 0;
-}
-}
-this._bfs(list);
-
-
-list = [];
-list.push(this._rootNodeIndex);
-this._distancesToWindow[this._rootNodeIndex] = 0;
-this._bfs(list);
+return true;
 },
 
-_bfs: function(list)
+_calculateDistances: function()
+{
+var nodeFieldCount = this._nodeFieldCount;
+var distances = new Uint32Array(this.nodeCount);
+
+
+var nodesToVisit = new Uint32Array(this.nodeCount);
+var nodesToVisitLength = 0;
+for (var iter = this.rootNode().edges(); iter.hasNext(); iter.next()) {
+var node = iter.edge.node();
+if (this.canHaveDistanceOne(node)) {
+nodesToVisit[nodesToVisitLength++] = node.nodeIndex;
+distances[node.nodeIndex / nodeFieldCount] = 1;
+}
+}
+this._bfs(nodesToVisit, nodesToVisitLength, distances);
+
+
+nodesToVisitLength = 0;
+nodesToVisit[nodesToVisitLength++] = this._rootNodeIndex;
+distances[this._rootNodeIndex / nodeFieldCount] = 1;
+this._bfs(nodesToVisit, nodesToVisitLength, distances);
+this._nodeDistances = distances;
+},
+
+_bfs: function(nodesToVisit, nodesToVisitLength, distances)
 {
 
 var edgeFieldsCount = this._edgeFieldsCount;
-var containmentEdges = this._containmentEdges;
 var nodeFieldCount = this._nodeFieldCount;
-var firstEdgeIndexOffset = this._firstEdgeIndexOffset;
+var containmentEdges = this._containmentEdges;
+var firstEdgeIndexes = this._firstEdgeIndexes;
 var edgeToNodeOffset = this._edgeToNodeOffset;
-var distancesToWindow = this._distancesToWindow;
+var edgeTypeOffset = this._edgeTypeOffset;
 var nodes = this._nodes;
+var nodeCount = this.nodeCount;
+var containmentEdgesLength = containmentEdges.length;
+var edgeWeakType = this._edgeWeakType;
 
 var index = 0;
-while (index < list.length) {
-var nodeIndex = list[index++]; 
-if (index > 100000) {
-list = list.slice(index);
-index = 0;
-}
-var distance = distancesToWindow[nodeIndex] + 1;
-
-var firstEdgeIndex = nodes[nodeIndex + firstEdgeIndexOffset];
-var edgesEnd = nodeIndex < nodes.length
-? nodes[nodeIndex + nodeFieldCount + firstEdgeIndexOffset]
-: containmentEdges.length;
-for (var edgeToNodeIndex = firstEdgeIndex + edgeToNodeOffset; edgeToNodeIndex < edgesEnd; edgeToNodeIndex += edgeFieldsCount) {
-var childNodeIndex = containmentEdges[edgeToNodeIndex];
-if (childNodeIndex % nodeFieldCount)
-throw new Error("Invalid childNodeIndex: " + childNodeIndex);
-if (childNodeIndex in distancesToWindow)
+while (index < nodesToVisitLength) {
+var nodeIndex = nodesToVisit[index++]; 
+var nodeOrdinal = nodeIndex / nodeFieldCount;
+var distance = distances[nodeOrdinal] + 1;
+var firstEdgeIndex = firstEdgeIndexes[nodeOrdinal];
+var edgesEnd = firstEdgeIndexes[nodeOrdinal + 1];
+for (var edgeIndex = firstEdgeIndex; edgeIndex < edgesEnd; edgeIndex += edgeFieldsCount) {
+var edgeType = containmentEdges[edgeIndex + edgeTypeOffset];
+if (edgeType == edgeWeakType)
 continue;
-distancesToWindow[childNodeIndex] = distance;
-list.push(childNodeIndex);
+var childNodeIndex = containmentEdges[edgeIndex + edgeToNodeOffset];
+var childNodeOrdinal = childNodeIndex / nodeFieldCount;
+if (distances[childNodeOrdinal])
+continue;
+distances[childNodeOrdinal] = distance;
+nodesToVisit[nodesToVisitLength++] = childNodeIndex;
 }
 }
+if (nodesToVisitLength > nodeCount)
+throw new Error("BFS failed. Nodes to visit (" + nodesToVisitLength + ") is more than nodes count (" + nodeCount + ")");
 },
 
 _buildAggregates: function(filter)
 {
 var aggregates = {};
 var aggregatesByClassName = {};
+var classIndexes = [];
 var nodes = this._nodes;
+var mapAndFlag = this.userObjectsMapAndFlag();
+var flags = mapAndFlag ? mapAndFlag.map : null;
+var flag = mapAndFlag ? mapAndFlag.flag : 0;
 var nodesLength = nodes.length;
 var nodeNativeType = this._nodeNativeType;
-var nodeFieldsCount = this._nodeFieldCount;
+var nodeFieldCount = this._nodeFieldCount;
 var selfSizeOffset = this._nodeSelfSizeOffset;
 var nodeTypeOffset = this._nodeTypeOffset;
-var node = new WebInspector.HeapSnapshotNode(this, this._rootNodeIndex);
-var distancesToWindow = this._distancesToWindow;
+var node = this.rootNode();
+var nodeDistances = this._nodeDistances;
 
-for (var nodeIndex = this._rootNodeIndex; nodeIndex < nodesLength; nodeIndex += nodeFieldsCount) {
+for (var nodeIndex = 0; nodeIndex < nodesLength; nodeIndex += nodeFieldCount) {
+var nodeOrdinal = nodeIndex / nodeFieldCount;
+if (flags && !(flags[nodeOrdinal] & flag))
+continue;
 node.nodeIndex = nodeIndex;
-var selfSize = nodes[nodeIndex + selfSizeOffset];
 if (filter && !filter(node))
 continue;
+var selfSize = nodes[nodeIndex + selfSizeOffset];
 if (!selfSize && nodes[nodeIndex + nodeTypeOffset] !== nodeNativeType)
 continue;
-var classIndex = node.classIndex;
+var classIndex = node.classIndex();
 if (!(classIndex in aggregates)) {
-var nodeType = node.type;
+var nodeType = node.type();
 var nameMatters = nodeType === "object" || nodeType === "native";
 var value = {
 count: 1,
-distanceToWindow: distancesToWindow[nodeIndex],
+distance: nodeDistances[nodeOrdinal],
 self: selfSize,
 maxRet: 0,
 type: nodeType,
-name: nameMatters ? node.name : null,
+name: nameMatters ? node.name() : null,
 idxs: [nodeIndex]
 };
 aggregates[classIndex] = value;
-aggregatesByClassName[node.className] = value;
+classIndexes.push(classIndex);
+aggregatesByClassName[node.className()] = value;
 } else {
 var clss = aggregates[classIndex];
-clss.distanceToWindow = Math.min(clss.distanceToWindow, distancesToWindow[nodeIndex]);
+clss.distance = Math.min(clss.distance, nodeDistances[nodeOrdinal]);
 ++clss.count;
 clss.self += selfSize;
 clss.idxs.push(nodeIndex);
@@ -949,15 +845,17 @@ clss.idxs.push(nodeIndex);
 }
 
 
-for (var classIndex in aggregates)
-aggregates[classIndex].idxs = aggregates[classIndex].idxs.slice(0);
+for (var i = 0, l = classIndexes.length; i < l; ++i) {
+var classIndex = classIndexes[i];
+aggregates[classIndex].idxs = aggregates[classIndex].idxs.slice();
+}
 return {aggregatesByClassName: aggregatesByClassName, aggregatesByClassIndex: aggregates};
 },
 
 _calculateClassesRetainedSize: function(aggregates, filter)
 {
 var rootNodeIndex = this._rootNodeIndex;
-var node = new WebInspector.HeapSnapshotNode(this, rootNodeIndex);
+var node = this.createNode(rootNodeIndex);
 var list = [rootNodeIndex];
 var sizes = [-1];
 var classes = [];
@@ -967,22 +865,26 @@ var nodeTypeOffset = this._nodeTypeOffset;
 var nodeNativeType = this._nodeNativeType;
 var dominatedNodes = this._dominatedNodes;
 var nodes = this._nodes;
+var mapAndFlag = this.userObjectsMapAndFlag();
+var flags = mapAndFlag ? mapAndFlag.map : null;
+var flag = mapAndFlag ? mapAndFlag.flag : 0;
 var firstDominatedNodeIndex = this._firstDominatedNodeIndex;
 
 while (list.length) {
 var nodeIndex = list.pop();
 node.nodeIndex = nodeIndex;
-var classIndex = node.classIndex;
+var classIndex = node.classIndex();
 var seen = !!seenClassNameIndexes[classIndex];
 var nodeOrdinal = nodeIndex / nodeFieldCount;
 var dominatedIndexFrom = firstDominatedNodeIndex[nodeOrdinal];
 var dominatedIndexTo = firstDominatedNodeIndex[nodeOrdinal + 1];
 
 if (!seen &&
+(!flags || (flags[nodeOrdinal] & flag)) &&
 (!filter || filter(node)) &&
-(node.selfSize || nodes[nodeIndex + nodeTypeOffset] === nodeNativeType)
+(node.selfSize() || nodes[nodeIndex + nodeTypeOffset] === nodeNativeType)
 ) {
-aggregates[classIndex].maxRet += node.retainedSize;
+aggregates[classIndex].maxRet += node.retainedSize();
 if (dominatedIndexFrom !== dominatedIndexTo) {
 seenClassNameIndexes[classIndex] = true;
 sizes.push(list.length);
@@ -1003,15 +905,224 @@ seenClassNameIndexes[classIndex] = false;
 
 _sortAggregateIndexes: function(aggregates)
 {
-var nodeA = new WebInspector.HeapSnapshotNode(this);
-var nodeB = new WebInspector.HeapSnapshotNode(this);
+var nodeA = this.createNode();
+var nodeB = this.createNode();
 for (var clss in aggregates)
 aggregates[clss].idxs.sort(
 function(idxA, idxB) {
 nodeA.nodeIndex = idxA;
 nodeB.nodeIndex = idxB;
-return nodeA.id < nodeB.id ? -1 : 1;
+return nodeA.id() < nodeB.id() ? -1 : 1;
 });
+},
+
+_buildPostOrderIndex: function()
+{
+var nodeFieldCount = this._nodeFieldCount;
+var nodes = this._nodes;
+var nodeCount = this.nodeCount;
+var rootNodeOrdinal = this._rootNodeIndex / nodeFieldCount;
+
+var edgeFieldsCount = this._edgeFieldsCount;
+var edgeTypeOffset = this._edgeTypeOffset;
+var edgeToNodeOffset = this._edgeToNodeOffset;
+var edgeShortcutType = this._edgeShortcutType;
+var firstEdgeIndexes = this._firstEdgeIndexes;
+var containmentEdges = this._containmentEdges;
+var containmentEdgesLength = this._containmentEdges.length;
+
+var mapAndFlag = this.userObjectsMapAndFlag();
+var flags = mapAndFlag ? mapAndFlag.map : null;
+var flag = mapAndFlag ? mapAndFlag.flag : 0;
+
+var nodesToVisit = new Uint32Array(nodeCount);
+var postOrderIndex2NodeOrdinal = new Uint32Array(nodeCount);
+var nodeOrdinal2PostOrderIndex = new Uint32Array(nodeCount);
+var painted = new Uint8Array(nodeCount);
+var nodesToVisitLength = 0;
+var postOrderIndex = 0;
+var grey = 1;
+var black = 2;
+
+nodesToVisit[nodesToVisitLength++] = rootNodeOrdinal;
+painted[rootNodeOrdinal] = grey;
+
+while (nodesToVisitLength) {
+var nodeOrdinal = nodesToVisit[nodesToVisitLength - 1];
+
+if (painted[nodeOrdinal] === grey) {
+painted[nodeOrdinal] = black;
+var nodeFlag = !flags || (flags[nodeOrdinal] & flag);
+var beginEdgeIndex = firstEdgeIndexes[nodeOrdinal];
+var endEdgeIndex = firstEdgeIndexes[nodeOrdinal + 1];
+for (var edgeIndex = beginEdgeIndex; edgeIndex < endEdgeIndex; edgeIndex += edgeFieldsCount) {
+if (nodeOrdinal !== rootNodeOrdinal && containmentEdges[edgeIndex + edgeTypeOffset] === edgeShortcutType)
+continue;
+var childNodeIndex = containmentEdges[edgeIndex + edgeToNodeOffset];
+var childNodeOrdinal = childNodeIndex / nodeFieldCount;
+var childNodeFlag = !flags || (flags[childNodeOrdinal] & flag);
+
+
+if (nodeOrdinal !== rootNodeOrdinal && childNodeFlag && !nodeFlag)
+continue;
+if (!painted[childNodeOrdinal]) {
+painted[childNodeOrdinal] = grey;
+nodesToVisit[nodesToVisitLength++] = childNodeOrdinal;
+}
+}
+} else {
+nodeOrdinal2PostOrderIndex[nodeOrdinal] = postOrderIndex;
+postOrderIndex2NodeOrdinal[postOrderIndex++] = nodeOrdinal;
+--nodesToVisitLength;
+}
+}
+
+if (postOrderIndex !== nodeCount)
+throw new Error("Postordering failed. " + (nodeCount - postOrderIndex) + " hanging nodes");
+
+return {postOrderIndex2NodeOrdinal: postOrderIndex2NodeOrdinal, nodeOrdinal2PostOrderIndex: nodeOrdinal2PostOrderIndex};
+},
+
+
+
+
+
+_buildDominatorTree: function(postOrderIndex2NodeOrdinal, nodeOrdinal2PostOrderIndex)
+{
+var nodeFieldCount = this._nodeFieldCount;
+var nodes = this._nodes;
+var firstRetainerIndex = this._firstRetainerIndex;
+var retainingNodes = this._retainingNodes;
+var retainingEdges = this._retainingEdges;
+var edgeFieldsCount = this._edgeFieldsCount;
+var edgeTypeOffset = this._edgeTypeOffset;
+var edgeToNodeOffset = this._edgeToNodeOffset;
+var edgeShortcutType = this._edgeShortcutType;
+var firstEdgeIndexes = this._firstEdgeIndexes;
+var containmentEdges = this._containmentEdges;
+var containmentEdgesLength = this._containmentEdges.length;
+var rootNodeIndex = this._rootNodeIndex;
+
+var mapAndFlag = this.userObjectsMapAndFlag();
+var flags = mapAndFlag ? mapAndFlag.map : null;
+var flag = mapAndFlag ? mapAndFlag.flag : 0;
+
+var nodesCount = postOrderIndex2NodeOrdinal.length;
+var rootPostOrderedIndex = nodesCount - 1;
+var noEntry = nodesCount;
+var dominators = new Uint32Array(nodesCount);
+for (var i = 0; i < rootPostOrderedIndex; ++i)
+dominators[i] = noEntry;
+dominators[rootPostOrderedIndex] = rootPostOrderedIndex;
+
+
+
+var affected = new Uint8Array(nodesCount);
+var nodeOrdinal;
+
+{ 
+nodeOrdinal = this._rootNodeIndex / nodeFieldCount;
+var beginEdgeToNodeFieldIndex = firstEdgeIndexes[nodeOrdinal] + edgeToNodeOffset;
+var endEdgeToNodeFieldIndex = firstEdgeIndexes[nodeOrdinal + 1];
+for (var toNodeFieldIndex = beginEdgeToNodeFieldIndex;
+toNodeFieldIndex < endEdgeToNodeFieldIndex;
+toNodeFieldIndex += edgeFieldsCount) {
+var childNodeOrdinal = containmentEdges[toNodeFieldIndex] / nodeFieldCount;
+affected[nodeOrdinal2PostOrderIndex[childNodeOrdinal]] = 1;
+}
+}
+
+var changed = true;
+while (changed) {
+changed = false;
+for (var postOrderIndex = rootPostOrderedIndex - 1; postOrderIndex >= 0; --postOrderIndex) {
+if (affected[postOrderIndex] === 0)
+continue;
+affected[postOrderIndex] = 0;
+
+
+if (dominators[postOrderIndex] === rootPostOrderedIndex)
+continue;
+nodeOrdinal = postOrderIndex2NodeOrdinal[postOrderIndex];
+var nodeFlag = !flags || (flags[nodeOrdinal] & flag);
+var newDominatorIndex = noEntry;
+var beginRetainerIndex = firstRetainerIndex[nodeOrdinal];
+var endRetainerIndex = firstRetainerIndex[nodeOrdinal + 1];
+for (var retainerIndex = beginRetainerIndex; retainerIndex < endRetainerIndex; ++retainerIndex) {
+var retainerEdgeIndex = retainingEdges[retainerIndex];
+var retainerEdgeType = containmentEdges[retainerEdgeIndex + edgeTypeOffset];
+var retainerNodeIndex = retainingNodes[retainerIndex];
+if (retainerNodeIndex !== rootNodeIndex && retainerEdgeType === edgeShortcutType)
+continue;
+var retainerNodeOrdinal = retainerNodeIndex / nodeFieldCount;
+var retainerNodeFlag = !flags || (flags[retainerNodeOrdinal] & flag);
+
+
+if (retainerNodeIndex !== rootNodeIndex && nodeFlag && !retainerNodeFlag)
+continue;
+var retanerPostOrderIndex = nodeOrdinal2PostOrderIndex[retainerNodeOrdinal];
+if (dominators[retanerPostOrderIndex] !== noEntry) {
+if (newDominatorIndex === noEntry)
+newDominatorIndex = retanerPostOrderIndex;
+else {
+while (retanerPostOrderIndex !== newDominatorIndex) {
+while (retanerPostOrderIndex < newDominatorIndex)
+retanerPostOrderIndex = dominators[retanerPostOrderIndex];
+while (newDominatorIndex < retanerPostOrderIndex)
+newDominatorIndex = dominators[newDominatorIndex];
+}
+}
+
+
+if (newDominatorIndex === rootPostOrderedIndex)
+break;
+}
+}
+if (newDominatorIndex !== noEntry && dominators[postOrderIndex] !== newDominatorIndex) {
+dominators[postOrderIndex] = newDominatorIndex;
+changed = true;
+nodeOrdinal = postOrderIndex2NodeOrdinal[postOrderIndex];
+beginEdgeToNodeFieldIndex = firstEdgeIndexes[nodeOrdinal] + edgeToNodeOffset;
+endEdgeToNodeFieldIndex = firstEdgeIndexes[nodeOrdinal + 1];
+for (var toNodeFieldIndex = beginEdgeToNodeFieldIndex;
+toNodeFieldIndex < endEdgeToNodeFieldIndex;
+toNodeFieldIndex += edgeFieldsCount) {
+var childNodeOrdinal = containmentEdges[toNodeFieldIndex] / nodeFieldCount;
+affected[nodeOrdinal2PostOrderIndex[childNodeOrdinal]] = 1;
+}
+}
+}
+}
+
+var dominatorsTree = new Uint32Array(nodesCount);
+for (var postOrderIndex = 0, l = dominators.length; postOrderIndex < l; ++postOrderIndex) {
+nodeOrdinal = postOrderIndex2NodeOrdinal[postOrderIndex];
+dominatorsTree[nodeOrdinal] = postOrderIndex2NodeOrdinal[dominators[postOrderIndex]];
+}
+return dominatorsTree;
+},
+
+_calculateRetainedSizes: function(postOrderIndex2NodeOrdinal)
+{
+var nodeCount = this.nodeCount;
+var nodes = this._nodes;
+var nodeSelfSizeOffset = this._nodeSelfSizeOffset;
+var nodeFieldCount = this._nodeFieldCount;
+var dominatorsTree = this._dominatorsTree;
+
+var nodeRetainedSizeOffset = this._nodeRetainedSizeOffset = this._nodeEdgeCountOffset;
+delete this._nodeEdgeCountOffset;
+
+for (var nodeIndex = 0, l = nodes.length; nodeIndex < l; nodeIndex += nodeFieldCount)
+nodes[nodeIndex + nodeRetainedSizeOffset] = nodes[nodeIndex + nodeSelfSizeOffset];
+
+
+for (var postOrderIndex = 0; postOrderIndex < nodeCount - 1; ++postOrderIndex) {
+var nodeOrdinal = postOrderIndex2NodeOrdinal[postOrderIndex];
+var nodeIndex = nodeOrdinal * nodeFieldCount;
+var dominatorIndex = dominatorsTree[nodeOrdinal] * nodeFieldCount;
+nodes[dominatorIndex + nodeRetainedSizeOffset] += nodes[nodeIndex + nodeRetainedSizeOffset];
+}
 },
 
 _buildDominatedNodes: function()
@@ -1027,16 +1138,24 @@ var dominatedNodes = this._dominatedNodes = new Uint32Array(this.nodeCount - 1);
 
 
 
-for (var nodeIndex = this._nodeFieldCount; nodeIndex < this._nodes.length; nodeIndex += this._nodeFieldCount) {
-var dominatorIndex = this._nodes[nodeIndex + this._dominatorOffset];
-if (dominatorIndex % this._nodeFieldCount)
-throw new Error("Wrong dominatorIndex " + dominatorIndex + " nodeIndex = " + nodeIndex + " nodeCount = " + this.nodeCount);
-++indexArray[dominatorIndex / this._nodeFieldCount];
-}
+var nodeFieldCount = this._nodeFieldCount;
+var dominatorsTree = this._dominatorsTree;
+
+var fromNodeOrdinal = 0;
+var toNodeOrdinal = this.nodeCount;
+var rootNodeOrdinal = this._rootNodeIndex / nodeFieldCount;
+if (rootNodeOrdinal === fromNodeOrdinal)
+fromNodeOrdinal = 1;
+else if (rootNodeOrdinal === toNodeOrdinal - 1)
+toNodeOrdinal = toNodeOrdinal - 1;
+else
+throw new Error("Root node is expected to be either first or last");
+for (var nodeOrdinal = fromNodeOrdinal; nodeOrdinal < toNodeOrdinal; ++nodeOrdinal)
+++indexArray[dominatorsTree[nodeOrdinal]];
 
 
 var firstDominatedNodeIndex = 0;
-for (var i = 0; i < this.nodeCount; ++i) {
+for (var i = 0, l = this.nodeCount; i < l; ++i) {
 var dominatedCount = dominatedNodes[firstDominatedNodeIndex] = indexArray[i];
 indexArray[i] = firstDominatedNodeIndex;
 firstDominatedNodeIndex += dominatedCount;
@@ -1044,42 +1163,17 @@ firstDominatedNodeIndex += dominatedCount;
 indexArray[this.nodeCount] = dominatedNodes.length;
 
 
-for (var nodeIndex = this._nodeFieldCount; nodeIndex < this._nodes.length; nodeIndex += this._nodeFieldCount) {
-var dominatorIndex = this._nodes[nodeIndex + this._dominatorOffset];
-if (dominatorIndex % this._nodeFieldCount)
-throw new Error("Wrong dominatorIndex " + dominatorIndex);
-var dominatorPos = dominatorIndex / this._nodeFieldCount;
-var dominatedRefIndex = indexArray[dominatorPos];
+for (var nodeOrdinal = fromNodeOrdinal; nodeOrdinal < toNodeOrdinal; ++nodeOrdinal) {
+var dominatorOrdinal = dominatorsTree[nodeOrdinal];
+var dominatedRefIndex = indexArray[dominatorOrdinal];
 dominatedRefIndex += (--dominatedNodes[dominatedRefIndex]);
-dominatedNodes[dominatedRefIndex] = nodeIndex;
+dominatedNodes[dominatedRefIndex] = nodeOrdinal * nodeFieldCount;
 }
 },
 
 _markInvisibleEdges: function()
 {
-
-
-
-for (var iter = this.rootNode.edges; iter.hasNext(); iter.next()) {
-var edge = iter.edge;
-if (!edge.isShortcut)
-continue;
-var node = edge.node;
-var propNames = {};
-for (var innerIter = node.edges; innerIter.hasNext(); innerIter.next()) {
-var globalObjEdge = innerIter.edge;
-if (globalObjEdge.isShortcut)
-propNames[globalObjEdge._nameOrIndex] = true;
-}
-for (innerIter.first(); innerIter.hasNext(); innerIter.next()) {
-var globalObjEdge = innerIter.edge;
-if (!globalObjEdge.isShortcut
-&& globalObjEdge.node.isHidden
-&& globalObjEdge._hasStringName
-&& (globalObjEdge._nameOrIndex in propNames))
-this._containmentEdges[globalObjEdge._edges._start + globalObjEdge.edgeIndex + this._edgeTypeOffset] = this._edgeInvisibleType;
-}
-}
+throw new Error("Not implemented");
 },
 
 _numbersComparator: function(a, b)
@@ -1087,75 +1181,14 @@ _numbersComparator: function(a, b)
 return a < b ? -1 : (a > b ? 1 : 0);
 },
 
-_markDetachedDOMTreeNodes: function()
-{
-var flag = this._nodeFlags.detachedDOMTreeNode;
-var detachedDOMTreesRoot;
-for (var iter = this.rootNode.edges; iter.hasNext(); iter.next()) {
-var node = iter.edge.node;
-if (node.isDetachedDOMTreesRoot) {
-detachedDOMTreesRoot = node;
-break;
-}
-}
-
-if (!detachedDOMTreesRoot)
-return;
-
-for (var iter = detachedDOMTreesRoot.edges; iter.hasNext(); iter.next()) {
-var node = iter.edge.node;
-if (node.isDetachedDOMTree) {
-for (var edgesIter = node.edges; edgesIter.hasNext(); edgesIter.next())
-this._flags[edgesIter.edge.node.nodeIndex] |= flag;
-}
-}
-},
-
-_markQueriableHeapObjects: function()
-{
-
-
-
-var flag = this._nodeFlags.canBeQueried;
-
-var list = [];
-for (var iter = this.rootNode.edges; iter.hasNext(); iter.next()) {
-if (iter.edge.node.isWindow)
-list.push(iter.edge.node.nodeIndex);
-}
-
-var edge = new WebInspector.HeapSnapshotEdge(this, undefined);
-var node = new WebInspector.HeapSnapshotNode(this);
-while (list.length) {
-var nodeIndex = list.pop();
-if (this._flags[nodeIndex] & flag)
-continue;
-node.nodeIndex = nodeIndex;
-this._flags[nodeIndex] |= flag;
-var edgesCount = node.edgesCount;
-edge._edges = node.rawEdges;
-for (var j = 0; j < edgesCount; ++j) {
-edge.edgeIndex = j * this._edgeFieldsCount;
-nodeIndex = edge.nodeIndex;
-if (this._flags[nodeIndex] & flag)
-continue;
-if (edge.isHidden || edge.isInvisible)
-continue;
-if (edge.isInternal)
-continue;
-var name = edge.name;
-if (!name)
-continue;
-list.push(nodeIndex);
-}
-}
-},
-
 _calculateFlags: function()
 {
-this._flags = new Array(this.nodeCount);
-this._markDetachedDOMTreeNodes();
-this._markQueriableHeapObjects();
+throw new Error("Not implemented");
+},
+
+userObjectsMapAndFlag: function()
+{
+throw new Error("Not implemented");
 },
 
 calculateSnapshotDiff: function(baseSnapshotId, baseSnapshotAggregates)
@@ -1200,18 +1233,18 @@ removedSize: 0,
 deletedIndexes: [],
 addedIndexes: [] };
 
-var nodeB = new WebInspector.HeapSnapshotNode(this, indexes[j]);
+var nodeB = this.createNode(indexes[j]);
 while (i < l && j < m) {
 var nodeAId = baseIds[i];
-if (nodeAId < nodeB.id) {
+if (nodeAId < nodeB.id()) {
 diff.deletedIndexes.push(baseIndexes[i]);
 diff.removedCount++;
 diff.removedSize += baseSelfSizes[i];
 ++i;
-} else if (nodeAId > nodeB.id) { 
+} else if (nodeAId > nodeB.id()) { 
 diff.addedIndexes.push(indexes[j]);
 diff.addedCount++;
-diff.addedSize += nodeB.selfSize;
+diff.addedSize += nodeB.selfSize();
 nodeB.nodeIndex = indexes[++j];
 } else { 
 ++i;
@@ -1227,7 +1260,7 @@ diff.removedSize += baseSelfSizes[i];
 while (j < m) {
 diff.addedIndexes.push(indexes[j]);
 diff.addedCount++;
-diff.addedSize += nodeB.selfSize;
+diff.addedSize += nodeB.selfSize();
 nodeB.nodeIndex = indexes[++j];
 }
 diff.countDelta = diff.addedCount - diff.removedCount;
@@ -1239,8 +1272,8 @@ return diff;
 
 _nodeForSnapshotObjectId: function(snapshotObjectId)
 {
-for (var it = this._allNodes; it.hasNext(); it.next()) {
-if (it.node.id === snapshotObjectId)
+for (var it = this._allNodes(); it.hasNext(); it.next()) {
+if (it.node.id() === snapshotObjectId)
 return it.node;
 }
 return null;
@@ -1250,7 +1283,7 @@ nodeClassName: function(snapshotObjectId)
 {
 var node = this._nodeForSnapshotObjectId(snapshotObjectId);
 if (node)
-return node.className;
+return node.className();
 return null;
 },
 
@@ -1260,9 +1293,9 @@ var node = this._nodeForSnapshotObjectId(snapshotObjectId);
 if (!node)
 return null;
 var result = [];
-while (!node.isRoot) {
-result.push(node.id);
-node.nodeIndex = node.dominatorIndex;
+while (!node.isRoot()) {
+result.push(node.id());
+node.nodeIndex = node.dominatorIndex();
 }
 return result;
 },
@@ -1277,14 +1310,14 @@ return parsedFilter.bind(this);
 
 createEdgesProvider: function(nodeIndex, filter)
 {
-var node = new WebInspector.HeapSnapshotNode(this, nodeIndex);
-return new WebInspector.HeapSnapshotEdgesProvider(this, this._parseFilter(filter), node.edges);
+var node = this.createNode(nodeIndex);
+return new WebInspector.HeapSnapshotEdgesProvider(this, this._parseFilter(filter), node.edges());
 },
 
 createRetainingEdgesProvider: function(nodeIndex, filter)
 {
-var node = new WebInspector.HeapSnapshotNode(this, nodeIndex);
-return new WebInspector.HeapSnapshotEdgesProvider(this, this._parseFilter(filter), node.retainers);
+var node = this.createNode(nodeIndex);
+return new WebInspector.HeapSnapshotEdgesProvider(this, this._parseFilter(filter), node.retainers());
 },
 
 createAddedNodesProvider: function(baseSnapshotId, className)
@@ -1301,18 +1334,21 @@ return new WebInspector.HeapSnapshotNodesProvider(this, null, nodeIndexes);
 
 createNodesProviderForClass: function(className, aggregatesKey)
 {
-return new WebInspector.HeapSnapshotNodesProvider(this, null, this.aggregates(false, aggregatesKey)[className].idxs);
+function filter(node) {
+return node.isUserObject();
+}
+return new WebInspector.HeapSnapshotNodesProvider(this, filter, this.aggregates(false, aggregatesKey)[className].idxs);
 },
 
 createNodesProviderForDominator: function(nodeIndex)
 {
-var node = new WebInspector.HeapSnapshotNode(this, nodeIndex);
+var node = this.createNode(nodeIndex);
 return new WebInspector.HeapSnapshotNodesProvider(this, null, this._dominatedNodesOfNode(node));
 },
 
 updateStaticData: function()
 {
-return {nodeCount: this.nodeCount, rootNodeIndex: this._rootNodeIndex, totalSize: this.totalSize, uid: this.uid, nodeFlags: this._nodeFlags};
+return {nodeCount: this.nodeCount, rootNodeIndex: this._rootNodeIndex, totalSize: this.totalSize, uid: this.uid};
 }
 };
 
@@ -1341,26 +1377,26 @@ return;
 this._iterationOrder = [];
 var iterator = this._iterator;
 if (!this._unfilteredIterationOrder && !this._filter) {
-for (iterator.first(); iterator.hasNext(); iterator.next())
-this._iterationOrder.push(iterator.index);
+for (iterator.rewind(); iterator.hasNext(); iterator.next())
+this._iterationOrder.push(iterator.index());
 } else if (!this._unfilteredIterationOrder) {
-for (iterator.first(); iterator.hasNext(); iterator.next()) {
-if (this._filter(iterator.item))
-this._iterationOrder.push(iterator.index);
+for (iterator.rewind(); iterator.hasNext(); iterator.next()) {
+if (this._filter(iterator.item()))
+this._iterationOrder.push(iterator.index());
 }
 } else {
 var order = this._unfilteredIterationOrder.constructor === Array ?
 this._unfilteredIterationOrder : this._unfilteredIterationOrder.slice(0);
 for (var i = 0, l = order.length; i < l; ++i) {
-iterator.index = order[i];
-if (this._filter(iterator.item))
-this._iterationOrder.push(iterator.index);
+iterator.setIndex(order[i]);
+if (this._filter(iterator.item()))
+this._iterationOrder.push(iterator.index());
 }
 this._unfilteredIterationOrder = null;
 }
 },
 
-first: function()
+rewind: function()
 {
 this._position = 0;
 },
@@ -1370,7 +1406,7 @@ hasNext: function()
 return this._position < this._iterationOrder.length;
 },
 
-get isEmpty()
+isEmpty: function()
 {
 if (this._iterationOrder)
 return !this._iterationOrder.length;
@@ -1378,28 +1414,28 @@ if (this._unfilteredIterationOrder && !this._filter)
 return !this._unfilteredIterationOrder.length;
 var iterator = this._iterator;
 if (!this._unfilteredIterationOrder && !this._filter) {
-iterator.first();
+iterator.rewind();
 return !iterator.hasNext();
 } else if (!this._unfilteredIterationOrder) {
-for (iterator.first(); iterator.hasNext(); iterator.next())
-if (this._filter(iterator.item))
+for (iterator.rewind(); iterator.hasNext(); iterator.next())
+if (this._filter(iterator.item()))
 return false;
 } else {
 var order = this._unfilteredIterationOrder.constructor === Array ?
 this._unfilteredIterationOrder : this._unfilteredIterationOrder.slice(0);
 for (var i = 0, l = order.length; i < l; ++i) {
-iterator.index = order[i];
-if (this._filter(iterator.item))
+iterator.setIndex(order[i]);
+if (this._filter(iterator.item()))
 return false;
 }
 }
 return true;
 },
 
-get item()
+item: function()
 {
-this._iterator.index = this._iterationOrder[this._position];
-return this._iterator.item;
+this._iterator.setIndex(this._iterationOrder[this._position]);
+return this._iterator.item();
 },
 
 get length()
@@ -1431,7 +1467,7 @@ var startPosition = this._position;
 var count = end - begin;
 var result = new Array(count);
 for (var i = 0 ; i < count && this.hasNext(); ++i, this.next())
-result[i] = this.serializeItem(this.item);
+result[i] = this.item().serialize();
 result.length = i;
 result.totalLength = this._iterationOrder.length;
 
@@ -1453,7 +1489,7 @@ sortAndRewind: function(comparator)
 {
 this._currentComparator = comparator;
 this._sortedPrefixLength = 0;
-this.first();
+this.rewind();
 }
 }
 
@@ -1470,18 +1506,6 @@ WebInspector.HeapSnapshotFilteredOrderedIterator.call(this, edgesIter, filter);
 }
 
 WebInspector.HeapSnapshotEdgesProvider.prototype = {
-serializeItem: function(edge)
-{
-return {
-name: edge.name,
-propertyAccessor: edge.toString(),
-node: WebInspector.HeapSnapshotNodesProvider.prototype.serializeItem(edge.node),
-nodeIndex: edge.nodeIndex,
-type: edge.type,
-distanceToWindow: edge.node.distanceToWindow
-};
-},
-
 sort: function(comparator, leftBound, rightBound, count)
 {
 var fieldName1 = comparator.fieldName1;
@@ -1489,33 +1513,33 @@ var fieldName2 = comparator.fieldName2;
 var ascending1 = comparator.ascending1;
 var ascending2 = comparator.ascending2;
 
-var edgeA = this._iterator.item.clone();
+var edgeA = this._iterator.item().clone();
 var edgeB = edgeA.clone();
-var nodeA = new WebInspector.HeapSnapshotNode(this.snapshot);
-var nodeB = new WebInspector.HeapSnapshotNode(this.snapshot);
+var nodeA = this.snapshot.createNode();
+var nodeB = this.snapshot.createNode();
 
 function compareEdgeFieldName(ascending, indexA, indexB)
 {
 edgeA.edgeIndex = indexA;
 edgeB.edgeIndex = indexB;
-if (edgeB.name === "__proto__") return -1;
-if (edgeA.name === "__proto__") return 1;
+if (edgeB.name() === "__proto__") return -1;
+if (edgeA.name() === "__proto__") return 1;
 var result =
-edgeA.hasStringName === edgeB.hasStringName ?
-(edgeA.name < edgeB.name ? -1 : (edgeA.name > edgeB.name ? 1 : 0)) :
-(edgeA.hasStringName ? -1 : 1);
+edgeA.hasStringName() === edgeB.hasStringName() ?
+(edgeA.name() < edgeB.name() ? -1 : (edgeA.name() > edgeB.name() ? 1 : 0)) :
+(edgeA.hasStringName() ? -1 : 1);
 return ascending ? result : -result;
 }
 
 function compareNodeField(fieldName, ascending, indexA, indexB)
 {
 edgeA.edgeIndex = indexA;
-nodeA.nodeIndex = edgeA.nodeIndex;
-var valueA = nodeA[fieldName];
+nodeA.nodeIndex = edgeA.nodeIndex();
+var valueA = nodeA[fieldName]();
 
 edgeB.edgeIndex = indexB;
-nodeB.nodeIndex = edgeB.nodeIndex;
-var valueB = nodeB[fieldName];
+nodeB.nodeIndex = edgeB.nodeIndex();
+var valueB = nodeB[fieldName]();
 
 var result = valueA < valueB ? -1 : (valueA > valueB ? 1 : 0);
 return ascending ? result : -result;
@@ -1548,47 +1572,34 @@ else if (fieldName2 === "!edgeName")
 this._iterationOrder.sortRange(compareNodeAndEdge, leftBound, rightBound, count);
 else
 this._iterationOrder.sortRange(compareNodeAndNode, leftBound, rightBound, count);
-}
-};
+},
 
-WebInspector.HeapSnapshotEdgesProvider.prototype.__proto__ = WebInspector.HeapSnapshotFilteredOrderedIterator.prototype;
+__proto__: WebInspector.HeapSnapshotFilteredOrderedIterator.prototype
+}
+
 
 
 WebInspector.HeapSnapshotNodesProvider = function(snapshot, filter, nodeIndexes)
 {
 this.snapshot = snapshot;
-WebInspector.HeapSnapshotFilteredOrderedIterator.call(this, snapshot._allNodes, filter, nodeIndexes);
+WebInspector.HeapSnapshotFilteredOrderedIterator.call(this, snapshot._allNodes(), filter, nodeIndexes);
 }
 
 WebInspector.HeapSnapshotNodesProvider.prototype = {
 nodePosition: function(snapshotObjectId)
 {
 this._createIterationOrder();
-if (this.isEmpty)
+if (this.isEmpty())
 return -1;
 this.sortAll();
 
-var node = new WebInspector.HeapSnapshotNode(this.snapshot);
+var node = this.snapshot.createNode();
 for (var i = 0; i < this._iterationOrder.length; i++) {
 node.nodeIndex = this._iterationOrder[i];
-if (node.id === snapshotObjectId)
+if (node.id() === snapshotObjectId)
 return i;
 }
 return -1;
-},
-
-serializeItem: function(node)
-{
-return {
-id: node.id,
-name: node.name,
-distanceToWindow: node.distanceToWindow,
-nodeIndex: node.nodeIndex,
-retainedSize: node.retainedSize,
-selfSize: node.selfSize,
-type: node.type,
-flags: node.flags
-};
 },
 
 sort: function(comparator, leftBound, rightBound, count)
@@ -1598,13 +1609,15 @@ var fieldName2 = comparator.fieldName2;
 var ascending1 = comparator.ascending1;
 var ascending2 = comparator.ascending2;
 
-var nodeA = new WebInspector.HeapSnapshotNode(this.snapshot);
-var nodeB = new WebInspector.HeapSnapshotNode(this.snapshot);
+var nodeA = this.snapshot.createNode();
+var nodeB = this.snapshot.createNode();
 
 function sortByNodeField(fieldName, ascending)
 {
-var valueA = nodeA[fieldName];
-var valueB = nodeB[fieldName];
+var valueOrFunctionA = nodeA[fieldName];
+var valueA = typeof valueOrFunctionA !== "function" ? valueOrFunctionA : valueOrFunctionA.call(nodeA);
+var valueOrFunctionB = nodeB[fieldName];
+var valueB = typeof valueOrFunctionB !== "function" ? valueOrFunctionB : valueOrFunctionB.call(nodeB);
 var result = valueA < valueB ? -1 : (valueA > valueB ? 1 : 0);
 return ascending ? result : -result;
 }
@@ -1619,47 +1632,43 @@ return result;
 }
 
 this._iterationOrder.sortRange(sortByComparator, leftBound, rightBound, count);
-}
-};
+},
 
-WebInspector.HeapSnapshotNodesProvider.prototype.__proto__ = WebInspector.HeapSnapshotFilteredOrderedIterator.prototype;
+__proto__: WebInspector.HeapSnapshotFilteredOrderedIterator.prototype
+}
+
 ;
 
 
 
 WebInspector.HeapSnapshotLoader = function()
 {
-this._json = "";
-this._state = "find-snapshot-info";
-this._snapshot = {};
+this._reset();
 }
 
 WebInspector.HeapSnapshotLoader.prototype = {
-_findBalancedCurlyBrackets: function()
+dispose: function()
 {
-var counter = 0;
-var openingBracket = "{".charCodeAt(0), closingBracket = "}".charCodeAt(0);
-for (var i = 0, l = this._json.length; i < l; ++i) {
-var character = this._json.charCodeAt(i);
-if (character === openingBracket)
-++counter;
-else if (character === closingBracket) {
-if (--counter === 0)
-return i + 1;
-}
-}
-return -1;
+this._reset();
 },
 
-finishLoading: function()
+_reset: function()
 {
-if (!this._json)
-return null;
-this._parseStringsArray();
 this._json = "";
-var result = new WebInspector.HeapSnapshot(this._snapshot);
-this._json = "";
+this._state = "find-snapshot-info";
 this._snapshot = {};
+},
+
+close: function()
+{
+if (this._json)
+this._parseStringsArray();
+},
+
+buildSnapshot: function()
+{
+var result = new WebInspector.JSHeapSnapshot(this._snapshot);
+this._reset();
 return result;
 },
 
@@ -1697,7 +1706,7 @@ if (index === length) {
 this._json = this._json.slice(startIndex);
 return true;
 }
-this._array.push(nextNumber);
+this._array[this._arrayIndex++] = nextNumber;
 }
 },
 
@@ -1710,7 +1719,8 @@ this._json = this._json.slice(0, closingBracketIndex + 1);
 this._snapshot.strings = JSON.parse(this._json);
 },
 
-pushJSONChunk: function(chunk)
+
+write: function(chunk)
 {
 this._json += chunk;
 switch (this._state) {
@@ -1721,18 +1731,14 @@ if (snapshotTokenIndex === -1)
 throw new Error("Snapshot token not found");
 this._json = this._json.slice(snapshotTokenIndex + snapshotToken.length + 1);
 this._state = "parse-snapshot-info";
-this.pushJSONChunk("");
-break;
 }
 case "parse-snapshot-info": {
-var closingBracketIndex = this._findBalancedCurlyBrackets();
+var closingBracketIndex = WebInspector.findBalancedCurlyBrackets(this._json);
 if (closingBracketIndex === -1)
 return;
-this._snapshot.snapshot =  JSON.parse(this._json.slice(0, closingBracketIndex));
+this._snapshot.snapshot =   (JSON.parse(this._json.slice(0, closingBracketIndex)));
 this._json = this._json.slice(closingBracketIndex);
 this._state = "find-nodes";
-this.pushJSONChunk("");
-break;
 }
 case "find-nodes": {
 var nodesToken = "\"nodes\"";
@@ -1745,19 +1751,16 @@ return;
 this._json = this._json.slice(bracketIndex + 1);
 var node_fields_count = this._snapshot.snapshot.meta.node_fields.length;
 var nodes_length = this._snapshot.snapshot.node_count * node_fields_count;
-this._array = new WebInspector.Uint32Array(nodes_length);
+this._array = new Uint32Array(nodes_length);
+this._arrayIndex = 0;
 this._state = "parse-nodes";
-this.pushJSONChunk("");
-break;
 }
 case "parse-nodes": {
 if (this._parseUintArray())
 return;
-this._snapshot.nodes = this._array.array;
+this._snapshot.nodes = this._array;
 this._state = "find-edges";
 this._array = null;
-this.pushJSONChunk("");
-break;
 }
 case "find-edges": {
 var edgesToken = "\"edges\"";
@@ -1770,19 +1773,16 @@ return;
 this._json = this._json.slice(bracketIndex + 1);
 var edge_fields_count = this._snapshot.snapshot.meta.edge_fields.length;
 var edges_length = this._snapshot.snapshot.edge_count * edge_fields_count;
-this._array = new WebInspector.Uint32Array(edges_length);
+this._array = new Uint32Array(edges_length);
+this._arrayIndex = 0;
 this._state = "parse-edges";
-this.pushJSONChunk("");
-break;
 }
 case "parse-edges": {
 if (this._parseUintArray())
 return;
-this._snapshot.edges = this._array.array;
+this._snapshot.edges = this._array;
 this._array = null;
 this._state = "find-strings";
-this.pushJSONChunk("");
-break;
 }
 case "find-strings": {
 var stringsToken = "\"strings\"";
@@ -1868,6 +1868,795 @@ this._postMessage(response);
 };
 ;
 
+
+
+WebInspector.JSHeapSnapshot = function(profile)
+{
+this._nodeFlags = { 
+canBeQueried: 1,
+detachedDOMTreeNode: 2,
+pageObject: 4, 
+
+visitedMarkerMask: 0x0ffff, 
+visitedMarker:     0x10000  
+};
+WebInspector.HeapSnapshot.call(this, profile);
+}
+
+WebInspector.JSHeapSnapshot.prototype = {
+createNode: function(nodeIndex)
+{
+return new WebInspector.JSHeapSnapshotNode(this, nodeIndex);
+},
+
+createEdge: function(edges, edgeIndex)
+{
+return new WebInspector.JSHeapSnapshotEdge(this, edges, edgeIndex);
+},
+
+createRetainingEdge: function(retainedNodeIndex, retainerIndex)
+{
+return new WebInspector.JSHeapSnapshotRetainerEdge(this, retainedNodeIndex, retainerIndex);
+},
+
+dispose: function()
+{
+WebInspector.HeapSnapshot.prototype.dispose.call(this);
+delete this._flags;
+},
+
+_markInvisibleEdges: function()
+{
+
+
+
+for (var iter = this.rootNode().edges(); iter.hasNext(); iter.next()) {
+var edge = iter.edge;
+if (!edge.isShortcut())
+continue;
+var node = edge.node();
+var propNames = {};
+for (var innerIter = node.edges(); innerIter.hasNext(); innerIter.next()) {
+var globalObjEdge = innerIter.edge;
+if (globalObjEdge.isShortcut())
+propNames[globalObjEdge._nameOrIndex()] = true;
+}
+for (innerIter.rewind(); innerIter.hasNext(); innerIter.next()) {
+var globalObjEdge = innerIter.edge;
+if (!globalObjEdge.isShortcut()
+&& globalObjEdge.node().isHidden()
+&& globalObjEdge._hasStringName()
+&& (globalObjEdge._nameOrIndex() in propNames))
+this._containmentEdges[globalObjEdge._edges._start + globalObjEdge.edgeIndex + this._edgeTypeOffset] = this._edgeInvisibleType;
+}
+}
+},
+
+_calculateFlags: function()
+{
+this._flags = new Uint32Array(this.nodeCount);
+this._markDetachedDOMTreeNodes();
+this._markQueriableHeapObjects();
+this._markPageOwnedNodes();
+},
+
+canHaveDistanceOne: function(node)
+{
+return node.isWindow();
+},
+
+userObjectsMapAndFlag: function()
+{
+return {
+map: this._flags,
+flag: this._nodeFlags.pageObject
+};
+},
+
+_flagsOfNode: function(node)
+{
+return this._flags[node.nodeIndex / this._nodeFieldCount];
+},
+
+_markDetachedDOMTreeNodes: function()
+{
+var flag = this._nodeFlags.detachedDOMTreeNode;
+var detachedDOMTreesRoot;
+for (var iter = this.rootNode().edges(); iter.hasNext(); iter.next()) {
+var node = iter.edge.node();
+if (node.isDetachedDOMTreesRoot()) {
+detachedDOMTreesRoot = node;
+break;
+}
+}
+
+if (!detachedDOMTreesRoot)
+return;
+
+for (var iter = detachedDOMTreesRoot.edges(); iter.hasNext(); iter.next()) {
+var node = iter.edge.node();
+if (node.isDetachedDOMTree()) {
+for (var edgesIter = node.edges(); edgesIter.hasNext(); edgesIter.next())
+this._flags[edgesIter.edge.node().nodeIndex / this._nodeFieldCount] |= flag;
+}
+}
+},
+
+_markQueriableHeapObjects: function()
+{
+
+
+
+var flag = this._nodeFlags.canBeQueried;
+var hiddenEdgeType = this._edgeHiddenType;
+var internalEdgeType = this._edgeInternalType;
+var invisibleEdgeType = this._edgeInvisibleType;
+var weakEdgeType = this._edgeWeakType;
+var edgeToNodeOffset = this._edgeToNodeOffset;
+var edgeTypeOffset = this._edgeTypeOffset;
+var edgeFieldsCount = this._edgeFieldsCount;
+var containmentEdges = this._containmentEdges;
+var nodes = this._nodes;
+var nodeCount = this.nodeCount;
+var nodeFieldCount = this._nodeFieldCount;
+var firstEdgeIndexes = this._firstEdgeIndexes;
+
+var flags = this._flags;
+var list = [];
+
+for (var iter = this.rootNode().edges(); iter.hasNext(); iter.next()) {
+if (iter.edge.node().isWindow())
+list.push(iter.edge.node().nodeIndex / nodeFieldCount);
+}
+
+while (list.length) {
+var nodeOrdinal = list.pop();
+if (flags[nodeOrdinal] & flag)
+continue;
+flags[nodeOrdinal] |= flag;
+var beginEdgeIndex = firstEdgeIndexes[nodeOrdinal];
+var endEdgeIndex = firstEdgeIndexes[nodeOrdinal + 1];
+for (var edgeIndex = beginEdgeIndex; edgeIndex < endEdgeIndex; edgeIndex += edgeFieldsCount) {
+var childNodeIndex = containmentEdges[edgeIndex + edgeToNodeOffset];
+var childNodeOrdinal = childNodeIndex / nodeFieldCount;
+if (flags[childNodeOrdinal] & flag)
+continue;
+var type = containmentEdges[edgeIndex + edgeTypeOffset];
+if (type === hiddenEdgeType || type === invisibleEdgeType || type === internalEdgeType || type === weakEdgeType)
+continue;
+list.push(childNodeOrdinal);
+}
+}
+},
+
+_markPageOwnedNodes: function()
+{
+var edgeShortcutType = this._edgeShortcutType;
+var edgeToNodeOffset = this._edgeToNodeOffset;
+var edgeTypeOffset = this._edgeTypeOffset;
+var edgeFieldsCount = this._edgeFieldsCount;
+var edgeWeakType = this._edgeWeakType;
+var firstEdgeIndexes = this._firstEdgeIndexes;
+var containmentEdges = this._containmentEdges;
+var containmentEdgesLength = containmentEdges.length;
+var nodes = this._nodes;
+var nodeFieldCount = this._nodeFieldCount;
+var nodesCount = this.nodeCount;
+
+var flags = this._flags;
+var flag = this._nodeFlags.pageObject;
+var visitedMarker = this._nodeFlags.visitedMarker;
+var visitedMarkerMask = this._nodeFlags.visitedMarkerMask;
+var markerAndFlag = visitedMarker | flag;
+
+var nodesToVisit = new Uint32Array(nodesCount);
+var nodesToVisitLength = 0;
+
+var rootNodeOrdinal = this._rootNodeIndex / nodeFieldCount;
+for (var edgeIndex = firstEdgeIndexes[rootNodeOrdinal], endEdgeIndex = firstEdgeIndexes[rootNodeOrdinal + 1];
+edgeIndex < endEdgeIndex;
+edgeIndex += edgeFieldsCount) {
+if (containmentEdges[edgeIndex + edgeTypeOffset] === edgeShortcutType) {
+var nodeOrdinal = containmentEdges[edgeIndex + edgeToNodeOffset] / nodeFieldCount;
+nodesToVisit[nodesToVisitLength++] = nodeOrdinal;
+flags[nodeOrdinal] |= visitedMarker;
+}
+}
+
+while (nodesToVisitLength) {
+var nodeOrdinal = nodesToVisit[--nodesToVisitLength];
+flags[nodeOrdinal] |= flag;
+flags[nodeOrdinal] &= visitedMarkerMask;
+var beginEdgeIndex = firstEdgeIndexes[nodeOrdinal];
+var endEdgeIndex = firstEdgeIndexes[nodeOrdinal + 1];
+for (var edgeIndex = beginEdgeIndex; edgeIndex < endEdgeIndex; edgeIndex += edgeFieldsCount) {
+var childNodeIndex = containmentEdges[edgeIndex + edgeToNodeOffset];
+var childNodeOrdinal = childNodeIndex / nodeFieldCount;
+if (flags[childNodeOrdinal] & markerAndFlag)
+continue;
+var type = containmentEdges[edgeIndex + edgeTypeOffset];
+if (type === edgeWeakType)
+continue;
+nodesToVisit[nodesToVisitLength++] = childNodeOrdinal;
+flags[childNodeOrdinal] |= visitedMarker;
+}
+}
+},
+
+__proto__: WebInspector.HeapSnapshot.prototype
+};
+
+
+WebInspector.JSHeapSnapshotNode = function(snapshot, nodeIndex)
+{
+WebInspector.HeapSnapshotNode.call(this, snapshot, nodeIndex)
+}
+
+WebInspector.JSHeapSnapshotNode.prototype = {
+canBeQueried: function()
+{
+var flags = this._snapshot._flagsOfNode(this);
+return !!(flags & this._snapshot._nodeFlags.canBeQueried);
+},
+
+isUserObject: function()
+{
+var flags = this._snapshot._flagsOfNode(this);
+return !!(flags & this._snapshot._nodeFlags.pageObject);
+},
+
+className: function()
+{
+var type = this.type();
+switch (type) {
+case "hidden":
+return WebInspector.UIString("(system)");
+case "object":
+case "native":
+return this.name();
+case "code":
+return WebInspector.UIString("(compiled code)");
+default:
+return "(" + type + ")";
+}
+},
+
+classIndex: function()
+{
+var snapshot = this._snapshot;
+var nodes = snapshot._nodes;
+var type = nodes[this.nodeIndex + snapshot._nodeTypeOffset];;
+if (type === snapshot._nodeObjectType || type === snapshot._nodeNativeType)
+return nodes[this.nodeIndex + snapshot._nodeNameOffset];
+return -1 - type;
+},
+
+id: function()
+{
+var snapshot = this._snapshot;
+return snapshot._nodes[this.nodeIndex + snapshot._nodeIdOffset];
+},
+
+isHidden: function()
+{
+return this._type() === this._snapshot._nodeHiddenType;
+},
+
+isSynthetic: function()
+{
+return this._type() === this._snapshot._nodeSyntheticType;
+},
+
+isWindow: function()
+{
+const windowRE = /^Window/;
+return windowRE.test(this.name());
+},
+
+isDetachedDOMTreesRoot: function()
+{
+return this.name() === "(Detached DOM trees)";
+},
+
+isDetachedDOMTree: function()
+{
+const detachedDOMTreeRE = /^Detached DOM tree/;
+return detachedDOMTreeRE.test(this.className());
+},
+
+serialize: function()
+{
+var result = WebInspector.HeapSnapshotNode.prototype.serialize.call(this);
+var flags = this._snapshot._flagsOfNode(this);
+if (flags & this._snapshot._nodeFlags.canBeQueried)
+result.canBeQueried = true;
+if (flags & this._snapshot._nodeFlags.detachedDOMTreeNode)
+result.detachedDOMTreeNode = true;
+return result;
+},
+
+__proto__: WebInspector.HeapSnapshotNode.prototype
+};
+
+
+WebInspector.JSHeapSnapshotEdge = function(snapshot, edges, edgeIndex)
+{
+WebInspector.HeapSnapshotEdge.call(this, snapshot, edges, edgeIndex);
+}
+
+WebInspector.JSHeapSnapshotEdge.prototype = {
+clone: function()
+{
+return new WebInspector.JSHeapSnapshotEdge(this._snapshot, this._edges, this.edgeIndex);
+},
+
+hasStringName: function()
+{
+if (!this.isShortcut())
+return this._hasStringName();
+return isNaN(parseInt(this._name(), 10));
+},
+
+isElement: function()
+{
+return this._type() === this._snapshot._edgeElementType;
+},
+
+isHidden: function()
+{
+return this._type() === this._snapshot._edgeHiddenType;
+},
+
+isWeak: function()
+{
+return this._type() === this._snapshot._edgeWeakType;
+},
+
+isInternal: function()
+{
+return this._type() === this._snapshot._edgeInternalType;
+},
+
+isInvisible: function()
+{
+return this._type() === this._snapshot._edgeInvisibleType;
+},
+
+isShortcut: function()
+{
+return this._type() === this._snapshot._edgeShortcutType;
+},
+
+name: function()
+{
+if (!this.isShortcut())
+return this._name();
+var numName = parseInt(this._name(), 10);
+return isNaN(numName) ? this._name() : numName;
+},
+
+toString: function()
+{
+var name = this.name();
+switch (this.type()) {
+case "context": return "->" + name;
+case "element": return "[" + name + "]";
+case "weak": return "[[" + name + "]]";
+case "property":
+return name.indexOf(" ") === -1 ? "." + name : "[\"" + name + "\"]";
+case "shortcut":
+if (typeof name === "string")
+return name.indexOf(" ") === -1 ? "." + name : "[\"" + name + "\"]";
+else
+return "[" + name + "]";
+case "internal":
+case "hidden":
+case "invisible":
+return "{" + name + "}";
+};
+return "?" + name + "?";
+},
+
+_hasStringName: function()
+{
+return !this.isElement() && !this.isHidden() && !this.isWeak();
+},
+
+_name: function()
+{
+return this._hasStringName() ? this._snapshot._strings[this._nameOrIndex()] : this._nameOrIndex();
+},
+
+_nameOrIndex: function()
+{
+return this._edges.item(this.edgeIndex + this._snapshot._edgeNameOffset);
+},
+
+_type: function()
+{
+return this._edges.item(this.edgeIndex + this._snapshot._edgeTypeOffset);
+},
+
+__proto__: WebInspector.HeapSnapshotEdge.prototype
+};
+
+
+
+WebInspector.JSHeapSnapshotRetainerEdge = function(snapshot, retainedNodeIndex, retainerIndex)
+{
+WebInspector.HeapSnapshotRetainerEdge.call(this, snapshot, retainedNodeIndex, retainerIndex);
+}
+
+WebInspector.JSHeapSnapshotRetainerEdge.prototype = {
+clone: function()
+{
+return new WebInspector.JSHeapSnapshotRetainerEdge(this._snapshot, this._retainedNodeIndex, this.retainerIndex());
+},
+
+isElement: function()
+{
+return this._edge().isElement();
+},
+
+isHidden: function()
+{
+return this._edge().isHidden();
+},
+
+isInternal: function()
+{
+return this._edge().isInternal();
+},
+
+isInvisible: function()
+{
+return this._edge().isInvisible();
+},
+
+isShortcut: function()
+{
+return this._edge().isShortcut();
+},
+
+isWeak: function()
+{
+return this._edge().isWeak();
+},
+
+__proto__: WebInspector.HeapSnapshotRetainerEdge.prototype
+}
+
+;
+
+
+
+WebInspector.OutputStreamDelegate = function()
+{
+}
+
+WebInspector.OutputStreamDelegate.prototype = {
+onTransferStarted: function() { },
+
+onTransferFinished: function() { },
+
+
+onChunkTransferred: function(reader) { },
+
+
+onError: function(reader, event) { },
+}
+
+
+WebInspector.OutputStream = function()
+{
+}
+
+WebInspector.OutputStream.prototype = {
+
+write: function(data, callback) { },
+
+close: function() { }
+}
+
+
+WebInspector.ChunkedReader = function()
+{
+}
+
+WebInspector.ChunkedReader.prototype = {
+
+fileSize: function() { },
+
+
+loadedSize: function() { },
+
+
+fileName: function() { },
+
+cancel: function() { }
+}
+
+
+WebInspector.ChunkedFileReader = function(file, chunkSize, delegate)
+{
+this._file = file;
+this._fileSize = file.size;
+this._loadedSize = 0;
+this._chunkSize = chunkSize;
+this._delegate = delegate;
+this._isCanceled = false;
+}
+
+WebInspector.ChunkedFileReader.prototype = {
+
+start: function(output)
+{
+this._output = output;
+
+this._reader = new FileReader();
+this._reader.onload = this._onChunkLoaded.bind(this);
+this._reader.onerror = this._delegate.onError.bind(this._delegate, this);
+this._delegate.onTransferStarted();
+this._loadChunk();
+},
+
+cancel: function()
+{
+this._isCanceled = true;
+},
+
+
+loadedSize: function()
+{
+return this._loadedSize;
+},
+
+
+fileSize: function()
+{
+return this._fileSize;
+},
+
+
+fileName: function()
+{
+return this._file.name;
+},
+
+
+_onChunkLoaded: function(event)
+{
+if (this._isCanceled)
+return;
+
+if (event.target.readyState !== FileReader.DONE)
+return;
+
+var data = event.target.result;
+this._loadedSize += data.length;
+
+this._output.write(data);
+if (this._isCanceled)
+return;
+this._delegate.onChunkTransferred(this);
+
+if (this._loadedSize === this._fileSize) {
+this._file = null;
+this._reader = null;
+this._output.close();
+this._delegate.onTransferFinished();
+return;
+}
+
+this._loadChunk();
+},
+
+_loadChunk: function()
+{
+var chunkStart = this._loadedSize;
+var chunkEnd = Math.min(this._fileSize, chunkStart + this._chunkSize)
+var nextPart = this._file.slice(chunkStart, chunkEnd);
+this._reader.readAsText(nextPart);
+}
+}
+
+
+WebInspector.ChunkedXHRReader = function(url, delegate)
+{
+this._url = url;
+this._delegate = delegate;
+this._fileSize = 0;
+this._loadedSize = 0;
+this._isCanceled = false;
+}
+
+WebInspector.ChunkedXHRReader.prototype = {
+
+start: function(output)
+{
+this._output = output;
+
+this._xhr = new XMLHttpRequest();
+this._xhr.open("GET", this._url, true);
+this._xhr.onload = this._onLoad.bind(this);
+this._xhr.onprogress = this._onProgress.bind(this);
+this._xhr.onerror = this._delegate.onError.bind(this._delegate, this);
+this._xhr.send(null);
+
+this._delegate.onTransferStarted();
+},
+
+cancel: function()
+{
+this._isCanceled = true;
+this._xhr.abort();
+},
+
+
+loadedSize: function()
+{
+return this._loadedSize;
+},
+
+
+fileSize: function()
+{
+return this._fileSize;
+},
+
+
+fileName: function()
+{
+return this._url;
+},
+
+
+_onProgress: function(event)
+{
+if (this._isCanceled)
+return;
+
+if (event.lengthComputable)
+this._fileSize = event.total;
+
+var data = this._xhr.responseText.substring(this._loadedSize);
+if (!data.length)
+return;
+
+this._loadedSize += data.length;
+this._output.write(data);
+if (this._isCanceled)
+return;
+this._delegate.onChunkTransferred(this);
+},
+
+
+_onLoad: function(event)
+{
+this._onProgress(event);
+
+if (this._isCanceled)
+return;
+
+this._output.close();
+this._delegate.onTransferFinished();
+}
+}
+
+
+WebInspector.createFileSelectorElement = function(callback) {
+var fileSelectorElement = document.createElement("input");
+fileSelectorElement.type = "file";
+fileSelectorElement.style.zIndex = -1;
+fileSelectorElement.style.position = "absolute";
+fileSelectorElement.onchange = function(event) {
+callback(fileSelectorElement.files[0]);
+};
+return fileSelectorElement;
+}
+
+
+WebInspector.findBalancedCurlyBrackets = function(source, startIndex, lastIndex) {
+lastIndex = lastIndex || source.length;
+startIndex = startIndex || 0;
+var counter = 0;
+var inString = false;
+
+for (var index = startIndex; index < lastIndex; ++index) {
+var character = source[index];
+if (inString) {
+if (character === "\\")
+++index;
+else if (character === "\"")
+inString = false;
+} else {
+if (character === "\"")
+inString = true;
+else if (character === "{")
+++counter;
+else if (character === "}") {
+if (--counter === 0)
+return index + 1;
+}
+}
+}
+return -1;
+}
+
+
+WebInspector.FileOutputStream = function()
+{
+}
+
+WebInspector.FileOutputStream.prototype = {
+
+open: function(fileName, callback)
+{
+this._closed = false;
+this._writeCallbacks = [];
+this._fileName = fileName;
+function callbackWrapper()
+{
+WebInspector.fileManager.removeEventListener(WebInspector.FileManager.EventTypes.SavedURL, callbackWrapper, this);
+WebInspector.fileManager.addEventListener(WebInspector.FileManager.EventTypes.AppendedToURL, this._onAppendDone, this);
+callback(this);
+}
+WebInspector.fileManager.addEventListener(WebInspector.FileManager.EventTypes.SavedURL, callbackWrapper, this);
+WebInspector.fileManager.save(this._fileName, "", true);
+},
+
+
+write: function(data, callback)
+{
+this._writeCallbacks.push(callback);
+WebInspector.fileManager.append(this._fileName, data);
+},
+
+close: function()
+{
+this._closed = true;
+if (this._writeCallbacks.length)
+return;
+WebInspector.fileManager.removeEventListener(WebInspector.FileManager.EventTypes.AppendedToURL, this._onAppendDone, this);
+WebInspector.fileManager.close(this._fileName);
+},
+
+
+_onAppendDone: function(event)
+{
+if (event.data !== this._fileName)
+return;
+if (!this._writeCallbacks.length) {
+if (this._closed) {
+WebInspector.fileManager.removeEventListener(WebInspector.FileManager.EventTypes.AppendedToURL, this._onAppendDone, this);
+WebInspector.fileManager.close(this._fileName);
+}
+return;
+}
+var callback = this._writeCallbacks.shift();
+if (callback)
+callback(this);
+}
+}
+;
+
+
+Object.isEmpty = function(obj)
+{
+for (var i in obj)
+return false;
+return true;
+}
+
+Object.values = function(obj)
+{
+var keys = Object.keys(obj);
+var result = [];
+
+for (var i = 0; i < keys.length; ++i)
+result.push(obj[keys[i]]);
+return result;
+}
 
 String.prototype.hasSubstring = function(string, caseInsensitive)
 {
@@ -1956,6 +2745,12 @@ var result = this.replace(/^(https|http|file):\/\//i, "");
 if (baseURLDomain)
 result = result.replace(new RegExp("^" + baseURLDomain.escapeForRegExp(), "i"), "");
 return result;
+}
+
+
+function sanitizeHref(href)
+{
+return href && href.trim().toLowerCase().startsWith("javascript:") ? "" : href;
 }
 
 String.prototype.removeURLFragment = function()
@@ -2048,6 +2843,18 @@ count -= step + 1;
 count = step;
 }
 return first;
+}
+});
+
+Object.defineProperty(Array.prototype, "rotate",
+{
+
+value: function(index)
+{
+var result = [];
+for (var i = index; i < index + this.length; ++i)
+result.push(this[i % this.length]);
+return result;
 }
 });
 
@@ -2164,6 +2971,18 @@ return result >= 0 ? result : -1;
 }
 });
 
+Object.defineProperty(Array.prototype, "select",
+{
+
+value: function(field)
+{
+var result = new Array(this.length);
+for (var i = 0; i < this.length; ++i)
+result[i] = this[i][field];
+return result;
+}
+});
+
 
 function insertionIndexForObjectInListSortedByFunction(anObject, aList, aFunction)
 {
@@ -2177,57 +2996,6 @@ while (index > 0 && aFunction(anObject, aList[index - 1]) === 0)
 index--;
 return index;
 }
-}
-
-Array.diff = function(left, right)
-{
-var o = left;
-var n = right;
-
-var ns = {};
-var os = {};
-
-for (var i = 0; i < n.length; i++) {
-if (ns[n[i]] == null)
-ns[n[i]] = { rows: [], o: null };
-ns[n[i]].rows.push(i);
-}
-
-for (var i = 0; i < o.length; i++) {
-if (os[o[i]] == null)
-os[o[i]] = { rows: [], n: null };
-os[o[i]].rows.push(i);
-}
-
-for (var i in ns) {
-if (ns[i].rows.length == 1 && typeof(os[i]) != "undefined" && os[i].rows.length == 1) {
-n[ns[i].rows[0]] = { text: n[ns[i].rows[0]], row: os[i].rows[0] };
-o[os[i].rows[0]] = { text: o[os[i].rows[0]], row: ns[i].rows[0] };
-}
-}
-
-for (var i = 0; i < n.length - 1; i++) {
-if (n[i].text != null && n[i + 1].text == null && n[i].row + 1 < o.length && o[n[i].row + 1].text == null && n[i + 1] == o[n[i].row + 1]) {
-n[i + 1] = { text: n[i + 1], row: n[i].row + 1 };
-o[n[i].row + 1] = { text: o[n[i].row + 1], row: i + 1 };
-}
-}
-
-for (var i = n.length - 1; i > 0; i--) {
-if (n[i].text != null && n[i - 1].text == null && n[i].row > 0 && o[n[i].row - 1].text == null &&
-n[i - 1] == o[n[i].row - 1]) {
-n[i - 1] = { text: n[i - 1], row: n[i].row - 1 };
-o[n[i].row - 1] = { text: o[n[i].row - 1], row: i - 1 };
-}
-}
-
-return { left: o, right: n };
-}
-
-Array.convert = function(list)
-{
-
-return Array.prototype.slice.call(list);
 }
 
 
@@ -2455,43 +3223,10 @@ return paddingString + numberString;
 }
 
 
-function TextDiff()
-{
-this.added = [];
-this.removed = [];
-this.changed = [];
-} 
-
-
-TextDiff.compute = function(baseContent, newContent)
-{
-var oldLines = baseContent.split(/\r?\n/);
-var newLines = newContent.split(/\r?\n/);
-
-var diff = Array.diff(oldLines, newLines);
-
-var diffData = new TextDiff();
-
-var offset = 0;
-var right = diff.right;
-for (var i = 0; i < right.length; ++i) {
-if (typeof right[i] === "string") {
-if (right.length > i + 1 && right[i + 1].row === i + 1 - offset)
-diffData.changed.push(i);
-else {
-diffData.added.push(i);
-offset++;
-}
-} else
-offset = i - right[i].row;
-}
-return diffData;
-}
-
-
 var Map = function()
 {
 this._map = {};
+this._size = 0;
 }
 
 Map._lastObjectIdentifier = 0;
@@ -2505,7 +3240,9 @@ if (!objectIdentifier) {
 objectIdentifier = ++Map._lastObjectIdentifier;
 key.__identifier = objectIdentifier;
 }
-this._map[objectIdentifier] = value;
+if (!this._map[objectIdentifier])
+++this._size;
+this._map[objectIdentifier] = [key, value];
 },
 
 
@@ -2513,27 +3250,139 @@ remove: function(key)
 {
 var result = this._map[key.__identifier];
 delete this._map[key.__identifier];
-return result;
+--this._size;
+return result ? result[1] : undefined;
+},
+
+
+keys: function()
+{
+return this._list(0);
 },
 
 values: function()
 {
-var result = [];
+return this._list(1);
+},
+
+
+_list: function(index)
+{
+var result = new Array(this._size);
+var i = 0;
 for (var objectIdentifier in this._map)
-result.push(this._map[objectIdentifier]);
+result[i++] = this._map[objectIdentifier][index];
 return result;
 },
 
 
 get: function(key)
 {
-return this._map[key.__identifier];
+var entry = this._map[key.__identifier];
+return entry ? entry[1] : undefined;
+},
+
+size: function()
+{
+return this._size;
 },
 
 clear: function()
 {
 this._map = {};
+this._size = 0;
 }
+}
+
+function loadXHR(url, async, callback) 
+{
+function onReadyStateChanged() 
+{
+if (xhr.readyState !== XMLHttpRequest.DONE)
+return;
+
+if (xhr.status === 200) {
+callback(xhr.responseText);
+return;
+}
+
+callback(null); 
+}
+
+var xhr = new XMLHttpRequest();
+xhr.open("GET", url, async);
+if (async)
+xhr.onreadystatechange = onReadyStateChanged;        
+xhr.send(null);
+
+if (!async) {
+if (xhr.status === 200) 
+return xhr.responseText;
+return null;
+}
+return null;
+}
+
+
+function StringPool()
+{
+this.reset();
+}
+
+StringPool.prototype = {
+
+intern: function(string)
+{
+
+if (string === "__proto__")
+return "__proto__";
+var result = this._strings[string];
+if (result === undefined) {
+this._strings[string] = string;
+result = string;
+}
+return result;
+},
+
+reset: function()
+{
+this._strings = Object.create(null);
+},
+
+
+internObjectStrings: function(obj, depthLimit)
+{
+if (typeof depthLimit !== "number")
+depthLimit = 100;
+else if (--depthLimit < 0)
+throw "recursion depth limit reached in StringPool.deepIntern(), perhaps attempting to traverse cyclical references?";
+
+for (var field in obj) {
+switch (typeof obj[field]) {
+case "string":
+obj[field] = this.intern(obj[field]);
+break;
+case "object":
+this.internObjectStrings(obj[field], depthLimit);
+break;
+}
+}
+}
+}
+
+var _importedScripts = {};
+
+
+function importScript(scriptName)
+{
+if (_importedScripts[scriptName])
+return;
+_importedScripts[scriptName] = true;
+var xhr = new XMLHttpRequest();
+xhr.open("GET", scriptName, false);
+xhr.send(null);
+var sourceURL = WebInspector.ParsedURL.completeURL(window.location.href, scriptName); 
+window.eval(xhr.responseText + "\n//@ sourceURL=" + sourceURL);
 }
 ;
 
@@ -2542,5 +3391,48 @@ function postMessageWrapper(message)
 postMessage(message);
 }
 
+
+WebInspector.WorkerConsole = function()
+{
+}
+
+WebInspector.WorkerConsole.prototype = {
+
+log: function(var_args)
+{
+this._postMessage("log", Array.prototype.slice.call(arguments));
+},
+
+
+error: function(var_args)
+{
+this._postMessage("error", Array.prototype.slice.call(arguments));
+},
+
+
+info: function(var_args)
+{
+this._postMessage("info", Array.prototype.slice.call(arguments));
+},
+
+trace: function()
+{
+this.log(new Error().stack);
+},
+
+
+
+_postMessage: function(method, args)
+{
+var rawMessage = {
+object: "console",
+method: method,
+arguments: args
+};
+postMessageWrapper(rawMessage);
+}
+};
+
 var dispatcher = new WebInspector.HeapSnapshotWorkerDispatcher(this, postMessageWrapper);
 addEventListener("message", dispatcher.dispatchMessage.bind(dispatcher), false);
+console = new WebInspector.WorkerConsole();

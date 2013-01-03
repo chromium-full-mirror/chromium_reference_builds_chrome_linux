@@ -81,8 +81,11 @@ IDC_HOME = _pyautolib.IDC_HOME
 IDC_OPEN_CURRENT_URL = _pyautolib.IDC_OPEN_CURRENT_URL
 IDC_STOP = _pyautolib.IDC_STOP
 IDC_RELOAD_IGNORING_CACHE = _pyautolib.IDC_RELOAD_IGNORING_CACHE
+IDC_LOAD_NEW_TAB_PAGE = _pyautolib.IDC_LOAD_NEW_TAB_PAGE
+IDC_RELOAD_CLEARING_CACHE = _pyautolib.IDC_RELOAD_CLEARING_CACHE
 IDC_NEW_WINDOW = _pyautolib.IDC_NEW_WINDOW
 IDC_NEW_INCOGNITO_WINDOW = _pyautolib.IDC_NEW_INCOGNITO_WINDOW
+IDC_PIN_TO_START_SCREEN = _pyautolib.IDC_PIN_TO_START_SCREEN
 IDC_CLOSE_WINDOW = _pyautolib.IDC_CLOSE_WINDOW
 IDC_ALWAYS_ON_TOP = _pyautolib.IDC_ALWAYS_ON_TOP
 IDC_NEW_TAB = _pyautolib.IDC_NEW_TAB
@@ -109,6 +112,11 @@ IDC_SEARCH = _pyautolib.IDC_SEARCH
 IDC_TABPOSE = _pyautolib.IDC_TABPOSE
 IDC_DEBUG_FRAME_TOGGLE = _pyautolib.IDC_DEBUG_FRAME_TOGGLE
 IDC_PRESENTATION_MODE = _pyautolib.IDC_PRESENTATION_MODE
+IDC_METRO_SNAP_ENABLE = _pyautolib.IDC_METRO_SNAP_ENABLE
+IDC_METRO_SNAP_DISABLE = _pyautolib.IDC_METRO_SNAP_DISABLE
+IDC_WIN8_DESKTOP_RESTART = _pyautolib.IDC_WIN8_DESKTOP_RESTART
+IDC_WIN8_METRO_RESTART = _pyautolib.IDC_WIN8_METRO_RESTART
+IDC_TOGGLE_ASH_DESKTOP = _pyautolib.IDC_TOGGLE_ASH_DESKTOP
 IDC_BOOKMARK_PAGE = _pyautolib.IDC_BOOKMARK_PAGE
 IDC_BOOKMARK_ALL_TABS = _pyautolib.IDC_BOOKMARK_ALL_TABS
 IDC_VIEW_SOURCE = _pyautolib.IDC_VIEW_SOURCE
@@ -118,6 +126,8 @@ IDC_ENCODING_MENU = _pyautolib.IDC_ENCODING_MENU
 IDC_EMAIL_PAGE_LOCATION = _pyautolib.IDC_EMAIL_PAGE_LOCATION
 IDC_ADVANCED_PRINT = _pyautolib.IDC_ADVANCED_PRINT
 IDC_CHROME_TO_MOBILE_PAGE = _pyautolib.IDC_CHROME_TO_MOBILE_PAGE
+IDC_PRINT_TO_DESTINATION = _pyautolib.IDC_PRINT_TO_DESTINATION
+IDC_BOOKMARK_PAGE_FROM_STAR = _pyautolib.IDC_BOOKMARK_PAGE_FROM_STAR
 IDC_ENCODING_AUTO_DETECT = _pyautolib.IDC_ENCODING_AUTO_DETECT
 IDC_ENCODING_UTF8 = _pyautolib.IDC_ENCODING_UTF8
 IDC_ENCODING_UTF16LE = _pyautolib.IDC_ENCODING_UTF16LE
@@ -193,7 +203,8 @@ IDC_OPTIONS = _pyautolib.IDC_OPTIONS
 IDC_EDIT_SEARCH_ENGINES = _pyautolib.IDC_EDIT_SEARCH_ENGINES
 IDC_VIEW_PASSWORDS = _pyautolib.IDC_VIEW_PASSWORDS
 IDC_ABOUT = _pyautolib.IDC_ABOUT
-IDC_HELP_PAGE = _pyautolib.IDC_HELP_PAGE
+IDC_HELP_PAGE_VIA_KEYBOARD = _pyautolib.IDC_HELP_PAGE_VIA_KEYBOARD
+IDC_HELP_PAGE_VIA_MENU = _pyautolib.IDC_HELP_PAGE_VIA_MENU
 IDC_SHOW_APP_MENU = _pyautolib.IDC_SHOW_APP_MENU
 IDC_MANAGE_EXTENSIONS = _pyautolib.IDC_MANAGE_EXTENSIONS
 IDC_DEV_TOOLS_INSPECT = _pyautolib.IDC_DEV_TOOLS_INSPECT
@@ -211,6 +222,11 @@ IDC_SHOW_SETTINGS_CHANGE_LAST = _pyautolib.IDC_SHOW_SETTINGS_CHANGE_LAST
 IDC_SHOW_AVATAR_MENU = _pyautolib.IDC_SHOW_AVATAR_MENU
 IDC_EXTENSION_DISABLED_FIRST = _pyautolib.IDC_EXTENSION_DISABLED_FIRST
 IDC_EXTENSION_DISABLED_LAST = _pyautolib.IDC_EXTENSION_DISABLED_LAST
+IDC_TOGGLE_REQUEST_TABLET_SITE = _pyautolib.IDC_TOGGLE_REQUEST_TABLET_SITE
+IDC_DEV_TOOLS_TOGGLE = _pyautolib.IDC_DEV_TOOLS_TOGGLE
+IDC_EXTERNAL_EXTENSION_ALERT = _pyautolib.IDC_EXTERNAL_EXTENSION_ALERT
+IDC_RECENT_TABS_MENU = _pyautolib.IDC_RECENT_TABS_MENU
+IDC_RECENT_TABS_NO_DEVICE_TABS = _pyautolib.IDC_RECENT_TABS_NO_DEVICE_TABS
 IDC_SPELLCHECK_SUGGESTION_0 = _pyautolib.IDC_SPELLCHECK_SUGGESTION_0
 IDC_SPELLCHECK_SUGGESTION_1 = _pyautolib.IDC_SPELLCHECK_SUGGESTION_1
 IDC_SPELLCHECK_SUGGESTION_2 = _pyautolib.IDC_SPELLCHECK_SUGGESTION_2
@@ -220,7 +236,7 @@ IDC_SPELLCHECK_SUGGESTION_LAST = _pyautolib.IDC_SPELLCHECK_SUGGESTION_LAST
 IDC_SPELLCHECK_MENU = _pyautolib.IDC_SPELLCHECK_MENU
 IDC_SPELLCHECK_LANGUAGES_FIRST = _pyautolib.IDC_SPELLCHECK_LANGUAGES_FIRST
 IDC_SPELLCHECK_LANGUAGES_LAST = _pyautolib.IDC_SPELLCHECK_LANGUAGES_LAST
-IDC_CHECK_SPELLING_OF_THIS_FIELD = _pyautolib.IDC_CHECK_SPELLING_OF_THIS_FIELD
+IDC_CHECK_SPELLING_WHILE_TYPING = _pyautolib.IDC_CHECK_SPELLING_WHILE_TYPING
 IDC_SPELLPANEL_TOGGLE = _pyautolib.IDC_SPELLPANEL_TOGGLE
 IDC_SPELLCHECK_ADD_TO_DICTIONARY = _pyautolib.IDC_SPELLCHECK_ADD_TO_DICTIONARY
 IDC_WRITING_DIRECTION_MENU = _pyautolib.IDC_WRITING_DIRECTION_MENU
@@ -282,6 +298,10 @@ IDC_CONTENT_CONTEXT_SPELLING_TOGGLE = _pyautolib.IDC_CONTENT_CONTEXT_SPELLING_TO
 IDC_CONTENT_CONTEXT_SPEECH_MENU = _pyautolib.IDC_CONTENT_CONTEXT_SPEECH_MENU
 IDC_CONTENT_CONTEXT_SPEECH_START_SPEAKING = _pyautolib.IDC_CONTENT_CONTEXT_SPEECH_START_SPEAKING
 IDC_CONTENT_CONTEXT_SPEECH_STOP_SPEAKING = _pyautolib.IDC_CONTENT_CONTEXT_SPEECH_STOP_SPEAKING
+IDC_CONTENT_CONTEXT_INSPECTBACKGROUNDPAGE = _pyautolib.IDC_CONTENT_CONTEXT_INSPECTBACKGROUNDPAGE
+IDC_CONTENT_CONTEXT_RELOAD_PACKAGED_APP = _pyautolib.IDC_CONTENT_CONTEXT_RELOAD_PACKAGED_APP
+IDC_CONTENT_CONTEXT_RESTART_PACKAGED_APP = _pyautolib.IDC_CONTENT_CONTEXT_RESTART_PACKAGED_APP
+IDC_CONTENT_CONTEXT_AUTOCORRECT_SPELLING_TOGGLE = _pyautolib.IDC_CONTENT_CONTEXT_AUTOCORRECT_SPELLING_TOGGLE
 IDC_CONTENT_CONTEXT_RELOADFRAME = _pyautolib.IDC_CONTENT_CONTEXT_RELOADFRAME
 IDC_CONTENT_CONTEXT_VIEWFRAMESOURCE = _pyautolib.IDC_CONTENT_CONTEXT_VIEWFRAMESOURCE
 IDC_CONTENT_CONTEXT_VIEWFRAMEINFO = _pyautolib.IDC_CONTENT_CONTEXT_VIEWFRAMEINFO
@@ -306,6 +326,7 @@ IDC_CONTENT_CONTEXT_SPEECH_INPUT_ABOUT = _pyautolib.IDC_CONTENT_CONTEXT_SPEECH_I
 IDC_MEDIA_STREAM_DEVICE_STATUS_TRAY = _pyautolib.IDC_MEDIA_STREAM_DEVICE_STATUS_TRAY
 IDC_MEDIA_CONTEXT_MEDIA_STREAM_CAPTURE_LIST_FIRST = _pyautolib.IDC_MEDIA_CONTEXT_MEDIA_STREAM_CAPTURE_LIST_FIRST
 IDC_MEDIA_CONTEXT_MEDIA_STREAM_CAPTURE_LIST_LAST = _pyautolib.IDC_MEDIA_CONTEXT_MEDIA_STREAM_CAPTURE_LIST_LAST
+IDC_MEDIA_STREAM_DEVICE_ALWAYS_ALLOW = _pyautolib.IDC_MEDIA_STREAM_DEVICE_ALWAYS_ALLOW
 IDC_CONTENT_CONTEXT_PROTOCOL_HANDLER_FIRST = _pyautolib.IDC_CONTENT_CONTEXT_PROTOCOL_HANDLER_FIRST
 IDC_CONTENT_CONTEXT_PROTOCOL_HANDLER_LAST = _pyautolib.IDC_CONTENT_CONTEXT_PROTOCOL_HANDLER_LAST
 IDC_CONTENT_CONTEXT_PROTOCOL_HANDLER_SETTINGS = _pyautolib.IDC_CONTENT_CONTEXT_PROTOCOL_HANDLER_SETTINGS
@@ -443,58 +464,35 @@ def IsCertStatusMinorError(*args):
 def MapCertStatusToNetError(*args):
   """MapCertStatusToNetError(CertStatus cert_status) -> int"""
   return _pyautolib.MapCertStatusToNetError(*args)
-class scoped_refptr__BrowserProxy(_object):
-    """Proxy of C++ scoped_refptr<(BrowserProxy)> class"""
+class GURL(_object):
+    """Represent a URL. Call spec() to get the string."""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, scoped_refptr__BrowserProxy, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, GURL, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, scoped_refptr__BrowserProxy, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, GURL, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
         """
-        __init__(self) -> scoped_refptr__BrowserProxy
-        __init__(self, BrowserProxy p) -> scoped_refptr__BrowserProxy
+        __init__(self) -> GURL
+        __init__(self, string url_string) -> GURL
+
+        Represent a URL. Call spec() to get the string.
         """
-        this = _pyautolib.new_scoped_refptr__BrowserProxy(*args)
+        this = _pyautolib.new_GURL(*args)
         try: self.this.append(this)
         except: self.this = this
-    __swig_destroy__ = _pyautolib.delete_scoped_refptr__BrowserProxy
+    def spec(self):
+        """
+        spec(self) -> string
+
+        Get the string representation.
+        """
+        return _pyautolib.GURL_spec(self)
+
+    __swig_destroy__ = _pyautolib.delete_GURL
     __del__ = lambda self : None;
-    def get(self):
-        """get(self) -> BrowserProxy"""
-        return _pyautolib.scoped_refptr__BrowserProxy_get(self)
-
-    def __deref__(self):
-        """__deref__(self) -> BrowserProxy"""
-        return _pyautolib.scoped_refptr__BrowserProxy___deref__(self)
-
-    def ActivateTab(self, *args):
-        """
-        ActivateTab(self, int tab_index) -> bool
-
-        Activate the tab at the given zero-based index
-        """
-        return _pyautolib.scoped_refptr__BrowserProxy_ActivateTab(self, *args)
-
-    def BringToFront(self):
-        """
-        BringToFront(self) -> bool
-
-        Activate the browser's window and bring it to front.
-        """
-        return _pyautolib.scoped_refptr__BrowserProxy_BringToFront(self)
-
-    def GetTab(self, *args):
-        """
-        GetTab(self, int tab_index) -> scoped_refptr__TabProxy
-
-        Get proxy to the tab at the given zero-based index
-        """
-        return _pyautolib.scoped_refptr__BrowserProxy_GetTab(self, *args)
-
-scoped_refptr__BrowserProxy_swigregister = _pyautolib.scoped_refptr__BrowserProxy_swigregister
-scoped_refptr__BrowserProxy_swigregister(scoped_refptr__BrowserProxy)
-kAppsPromoCounter = cvar.kAppsPromoCounter
+GURL_swigregister = _pyautolib.GURL_swigregister
+GURL_swigregister(GURL)
 kDefaultApps = cvar.kDefaultApps
 kDefaultAppsInstalled = cvar.kDefaultAppsInstalled
 kHomePageIsNewTabPage = cvar.kHomePageIsNewTabPage
@@ -502,40 +500,67 @@ kHomePage = cvar.kHomePage
 kHomePageChanged = cvar.kHomePageChanged
 kIsGooglePlusUser = cvar.kIsGooglePlusUser
 kSessionExitedCleanly = cvar.kSessionExitedCleanly
+kSessionExitType = cvar.kSessionExitType
 kRestoreOnStartup = cvar.kRestoreOnStartup
 kURLsToRestoreOnStartup = cvar.kURLsToRestoreOnStartup
 kRestoreOnStartupMigrated = cvar.kRestoreOnStartupMigrated
+kDisableScreenshots = cvar.kDisableScreenshots
 kApplicationLocale = cvar.kApplicationLocale
 kGlobalDefaultCharset = cvar.kGlobalDefaultCharset
+kWebKitGlobalDefaultFontSize = cvar.kWebKitGlobalDefaultFontSize
+kWebKitGlobalDefaultFixedFontSize = cvar.kWebKitGlobalDefaultFixedFontSize
+kWebKitGlobalMinimumFontSize = cvar.kWebKitGlobalMinimumFontSize
+kWebKitGlobalMinimumLogicalFontSize = cvar.kWebKitGlobalMinimumLogicalFontSize
+kWebKitGlobalJavascriptEnabled = cvar.kWebKitGlobalJavascriptEnabled
+kWebKitGlobalJavascriptCanOpenWindowsAutomatically = cvar.kWebKitGlobalJavascriptCanOpenWindowsAutomatically
+kWebKitGlobalLoadsImagesAutomatically = cvar.kWebKitGlobalLoadsImagesAutomatically
+kWebKitGlobalPluginsEnabled = cvar.kWebKitGlobalPluginsEnabled
+kWebKitGlobalStandardFontFamily = cvar.kWebKitGlobalStandardFontFamily
+kWebKitGlobalFixedFontFamily = cvar.kWebKitGlobalFixedFontFamily
+kWebKitGlobalSerifFontFamily = cvar.kWebKitGlobalSerifFontFamily
+kWebKitGlobalSansSerifFontFamily = cvar.kWebKitGlobalSansSerifFontFamily
+kWebKitGlobalCursiveFontFamily = cvar.kWebKitGlobalCursiveFontFamily
+kWebKitGlobalFantasyFontFamily = cvar.kWebKitGlobalFantasyFontFamily
+kWebKitOldStandardFontFamily = cvar.kWebKitOldStandardFontFamily
+kWebKitOldFixedFontFamily = cvar.kWebKitOldFixedFontFamily
+kWebKitOldSerifFontFamily = cvar.kWebKitOldSerifFontFamily
+kWebKitOldSansSerifFontFamily = cvar.kWebKitOldSansSerifFontFamily
+kWebKitOldCursiveFontFamily = cvar.kWebKitOldCursiveFontFamily
+kWebKitOldFantasyFontFamily = cvar.kWebKitOldFantasyFontFamily
 kDefaultCharset = cvar.kDefaultCharset
 kAcceptLanguages = cvar.kAcceptLanguages
 kStaticEncodings = cvar.kStaticEncodings
 kShowBookmarkBar = cvar.kShowBookmarkBar
 kBookmarkEditorExpandedNodes = cvar.kBookmarkEditorExpandedNodes
-kWebKitGlobalStandardFontFamily = cvar.kWebKitGlobalStandardFontFamily
+kWebKitCommonScript = cvar.kWebKitCommonScript
 kWebKitStandardFontFamily = cvar.kWebKitStandardFontFamily
-kWebKitGlobalFixedFontFamily = cvar.kWebKitGlobalFixedFontFamily
 kWebKitFixedFontFamily = cvar.kWebKitFixedFontFamily
-kWebKitGlobalSerifFontFamily = cvar.kWebKitGlobalSerifFontFamily
 kWebKitSerifFontFamily = cvar.kWebKitSerifFontFamily
-kWebKitGlobalSansSerifFontFamily = cvar.kWebKitGlobalSansSerifFontFamily
 kWebKitSansSerifFontFamily = cvar.kWebKitSansSerifFontFamily
-kWebKitGlobalCursiveFontFamily = cvar.kWebKitGlobalCursiveFontFamily
 kWebKitCursiveFontFamily = cvar.kWebKitCursiveFontFamily
-kWebKitGlobalFantasyFontFamily = cvar.kWebKitGlobalFantasyFontFamily
 kWebKitFantasyFontFamily = cvar.kWebKitFantasyFontFamily
+kWebKitPictographFontFamily = cvar.kWebKitPictographFontFamily
+kWebKitScriptsForFontFamilyMaps = cvar.kWebKitScriptsForFontFamilyMaps
+kWebKitScriptsForFontFamilyMapsLength = cvar.kWebKitScriptsForFontFamilyMapsLength
 kWebKitStandardFontFamilyMap = cvar.kWebKitStandardFontFamilyMap
 kWebKitFixedFontFamilyMap = cvar.kWebKitFixedFontFamilyMap
 kWebKitSerifFontFamilyMap = cvar.kWebKitSerifFontFamilyMap
 kWebKitSansSerifFontFamilyMap = cvar.kWebKitSansSerifFontFamilyMap
 kWebKitCursiveFontFamilyMap = cvar.kWebKitCursiveFontFamilyMap
 kWebKitFantasyFontFamilyMap = cvar.kWebKitFantasyFontFamilyMap
-kWebKitScriptsForFontFamilyMaps = cvar.kWebKitScriptsForFontFamilyMaps
-kWebKitScriptsForFontFamilyMapsLength = cvar.kWebKitScriptsForFontFamilyMapsLength
+kWebKitPictographFontFamilyMap = cvar.kWebKitPictographFontFamilyMap
 kWebKitStandardFontFamilyArabic = cvar.kWebKitStandardFontFamilyArabic
 kWebKitFixedFontFamilyArabic = cvar.kWebKitFixedFontFamilyArabic
 kWebKitSerifFontFamilyArabic = cvar.kWebKitSerifFontFamilyArabic
 kWebKitSansSerifFontFamilyArabic = cvar.kWebKitSansSerifFontFamilyArabic
+kWebKitStandardFontFamilyCyrillic = cvar.kWebKitStandardFontFamilyCyrillic
+kWebKitFixedFontFamilyCyrillic = cvar.kWebKitFixedFontFamilyCyrillic
+kWebKitSerifFontFamilyCyrillic = cvar.kWebKitSerifFontFamilyCyrillic
+kWebKitSansSerifFontFamilyCyrillic = cvar.kWebKitSansSerifFontFamilyCyrillic
+kWebKitStandardFontFamilyGreek = cvar.kWebKitStandardFontFamilyGreek
+kWebKitFixedFontFamilyGreek = cvar.kWebKitFixedFontFamilyGreek
+kWebKitSerifFontFamilyGreek = cvar.kWebKitSerifFontFamilyGreek
+kWebKitSansSerifFontFamilyGreek = cvar.kWebKitSansSerifFontFamilyGreek
 kWebKitStandardFontFamilyJapanese = cvar.kWebKitStandardFontFamilyJapanese
 kWebKitFixedFontFamilyJapanese = cvar.kWebKitFixedFontFamilyJapanese
 kWebKitSerifFontFamilyJapanese = cvar.kWebKitSerifFontFamilyJapanese
@@ -553,22 +578,14 @@ kWebKitStandardFontFamilyTraditionalHan = cvar.kWebKitStandardFontFamilyTraditio
 kWebKitFixedFontFamilyTraditionalHan = cvar.kWebKitFixedFontFamilyTraditionalHan
 kWebKitSerifFontFamilyTraditionalHan = cvar.kWebKitSerifFontFamilyTraditionalHan
 kWebKitSansSerifFontFamilyTraditionalHan = cvar.kWebKitSansSerifFontFamilyTraditionalHan
-kWebKitGlobalDefaultFontSize = cvar.kWebKitGlobalDefaultFontSize
 kWebKitDefaultFontSize = cvar.kWebKitDefaultFontSize
-kWebKitGlobalDefaultFixedFontSize = cvar.kWebKitGlobalDefaultFixedFontSize
 kWebKitDefaultFixedFontSize = cvar.kWebKitDefaultFixedFontSize
-kWebKitGlobalMinimumFontSize = cvar.kWebKitGlobalMinimumFontSize
 kWebKitMinimumFontSize = cvar.kWebKitMinimumFontSize
-kWebKitGlobalMinimumLogicalFontSize = cvar.kWebKitGlobalMinimumLogicalFontSize
 kWebKitMinimumLogicalFontSize = cvar.kWebKitMinimumLogicalFontSize
-kWebKitGlobalJavascriptEnabled = cvar.kWebKitGlobalJavascriptEnabled
 kWebKitJavascriptEnabled = cvar.kWebKitJavascriptEnabled
 kWebKitWebSecurityEnabled = cvar.kWebKitWebSecurityEnabled
-kWebKitGlobalJavascriptCanOpenWindowsAutomatically = cvar.kWebKitGlobalJavascriptCanOpenWindowsAutomatically
 kWebKitJavascriptCanOpenWindowsAutomatically = cvar.kWebKitJavascriptCanOpenWindowsAutomatically
-kWebKitGlobalLoadsImagesAutomatically = cvar.kWebKitGlobalLoadsImagesAutomatically
 kWebKitLoadsImagesAutomatically = cvar.kWebKitLoadsImagesAutomatically
-kWebKitGlobalPluginsEnabled = cvar.kWebKitGlobalPluginsEnabled
 kWebKitPluginsEnabled = cvar.kWebKitPluginsEnabled
 kWebKitDomPasteEnabled = cvar.kWebKitDomPasteEnabled
 kWebKitShrinksStandaloneImagesToFit = cvar.kWebKitShrinksStandaloneImagesToFit
@@ -584,8 +601,10 @@ kPasswordManagerAllowShowPasswords = cvar.kPasswordManagerAllowShowPasswords
 kPasswordGenerationEnabled = cvar.kPasswordGenerationEnabled
 kAutologinEnabled = cvar.kAutologinEnabled
 kReverseAutologinEnabled = cvar.kReverseAutologinEnabled
+kReverseAutologinRejectedEmailList = cvar.kReverseAutologinRejectedEmailList
 kSafeBrowsingEnabled = cvar.kSafeBrowsingEnabled
 kSafeBrowsingReportingEnabled = cvar.kSafeBrowsingReportingEnabled
+kSafeBrowsingProceedAnywayDisabled = cvar.kSafeBrowsingProceedAnywayDisabled
 kIncognitoModeAvailability = cvar.kIncognitoModeAvailability
 kSearchSuggestEnabled = cvar.kSearchSuggestEnabled
 kConfirmToQuitEnabled = cvar.kConfirmToQuitEnabled
@@ -601,6 +620,7 @@ kDefaultSearchProviderName = cvar.kDefaultSearchProviderName
 kDefaultSearchProviderKeyword = cvar.kDefaultSearchProviderKeyword
 kDefaultSearchProviderID = cvar.kDefaultSearchProviderID
 kDefaultSearchProviderPrepopulateID = cvar.kDefaultSearchProviderPrepopulateID
+kDefaultSearchProviderAlternateURLs = cvar.kDefaultSearchProviderAlternateURLs
 kSearchProviderOverrides = cvar.kSearchProviderOverrides
 kSearchProviderOverridesVersion = cvar.kSearchProviderOverridesVersion
 kPromptForDownload = cvar.kPromptForDownload
@@ -618,7 +638,8 @@ kUrlBlacklist = cvar.kUrlBlacklist
 kUrlWhitelist = cvar.kUrlWhitelist
 kInstantConfirmDialogShown = cvar.kInstantConfirmDialogShown
 kInstantEnabled = cvar.kInstantEnabled
-kInstantEnabledOnce = cvar.kInstantEnabledOnce
+kInstantExtendedEnabled = cvar.kInstantExtendedEnabled
+kInstantUIZeroSuggestUrlPrefix = cvar.kInstantUIZeroSuggestUrlPrefix
 kMultipleProfilePrefMigration = cvar.kMultipleProfilePrefMigration
 kNetworkPredictionEnabled = cvar.kNetworkPredictionEnabled
 kDefaultAppsInstallState = cvar.kDefaultAppsInstallState
@@ -631,12 +652,15 @@ kDeleteCache = cvar.kDeleteCache
 kDeleteCookies = cvar.kDeleteCookies
 kDeletePasswords = cvar.kDeletePasswords
 kDeleteFormData = cvar.kDeleteFormData
-kEnableSpellCheck = cvar.kEnableSpellCheck
-kSpeechInputTrayNotificationShown = cvar.kSpeechInputTrayNotificationShown
+kDeleteHostedAppsData = cvar.kDeleteHostedAppsData
+kDeauthorizeContentLicenses = cvar.kDeauthorizeContentLicenses
+kEnableContinuousSpellcheck = cvar.kEnableContinuousSpellcheck
 kSpeechRecognitionFilterProfanities = cvar.kSpeechRecognitionFilterProfanities
+kSpeechRecognitionTrayNotificationShownContexts = cvar.kSpeechRecognitionTrayNotificationShownContexts
 kEnabledLabsExperiments = cvar.kEnabledLabsExperiments
 kEnableAutoSpellCorrect = cvar.kEnableAutoSpellCorrect
 kSavingBrowserHistoryDisabled = cvar.kSavingBrowserHistoryDisabled
+kForceSafeSearch = cvar.kForceSafeSearch
 kDeleteTimePeriod = cvar.kDeleteTimePeriod
 kCurrentThemePackFilename = cvar.kCurrentThemePackFilename
 kCurrentThemeID = cvar.kCurrentThemeID
@@ -646,7 +670,8 @@ kCurrentThemeTints = cvar.kCurrentThemeTints
 kCurrentThemeDisplayProperties = cvar.kCurrentThemeDisplayProperties
 kExtensionsUIDeveloperMode = cvar.kExtensionsUIDeveloperMode
 kExtensionToolbarSize = cvar.kExtensionToolbarSize
-kExtensionKeybindings = cvar.kExtensionKeybindings
+kExtensionCommands = cvar.kExtensionCommands
+kExtensionsSideloadWipeoutBubbleShown = cvar.kExtensionsSideloadWipeoutBubbleShown
 kPluginsLastInternalDirectory = cvar.kPluginsLastInternalDirectory
 kPluginsPluginsList = cvar.kPluginsPluginsList
 kPluginsDisabledPlugins = cvar.kPluginsDisabledPlugins
@@ -654,7 +679,7 @@ kPluginsDisabledPluginsExceptions = cvar.kPluginsDisabledPluginsExceptions
 kPluginsEnabledPlugins = cvar.kPluginsEnabledPlugins
 kPluginsEnabledInternalPDF = cvar.kPluginsEnabledInternalPDF
 kPluginsEnabledNaCl = cvar.kPluginsEnabledNaCl
-kPluginsShowSetReaderDefaultInfobar = cvar.kPluginsShowSetReaderDefaultInfobar
+kPluginsMigratedToPepperFlash = cvar.kPluginsMigratedToPepperFlash
 kPluginsShowDetails = cvar.kPluginsShowDetails
 kPluginsAllowOutdated = cvar.kPluginsAllowOutdated
 kPluginsAlwaysAuthorize = cvar.kPluginsAlwaysAuthorize
@@ -662,13 +687,10 @@ kCheckDefaultBrowser = cvar.kCheckDefaultBrowser
 kDefaultBrowserSettingEnabled = cvar.kDefaultBrowserSettingEnabled
 kUseCustomChromeFrame = cvar.kUseCustomChromeFrame
 kShowOmniboxSearchHint = cvar.kShowOmniboxSearchHint
-kDesktopNotificationDefaultContentSetting = cvar.kDesktopNotificationDefaultContentSetting
-kDesktopNotificationAllowedOrigins = cvar.kDesktopNotificationAllowedOrigins
-kDesktopNotificationDeniedOrigins = cvar.kDesktopNotificationDeniedOrigins
 kDesktopNotificationPosition = cvar.kDesktopNotificationPosition
 kDefaultContentSettings = cvar.kDefaultContentSettings
+kContentSettingsClearOnExitMigrated = cvar.kContentSettingsClearOnExitMigrated
 kContentSettingsVersion = cvar.kContentSettingsVersion
-kContentSettingsPatterns = cvar.kContentSettingsPatterns
 kContentSettingsPatternPairs = cvar.kContentSettingsPatternPairs
 kContentSettingsDefaultWhitelistVersion = cvar.kContentSettingsDefaultWhitelistVersion
 kContentSettingsPluginWhitelist = cvar.kContentSettingsPluginWhitelist
@@ -676,7 +698,6 @@ kBlockThirdPartyCookies = cvar.kBlockThirdPartyCookies
 kClearSiteDataOnExit = cvar.kClearSiteDataOnExit
 kDefaultZoomLevel = cvar.kDefaultZoomLevel
 kPerHostZoomLevels = cvar.kPerHostZoomLevels
-kProfileShortcutCreated = cvar.kProfileShortcutCreated
 kAutofillEnabled = cvar.kAutofillEnabled
 kAutofillAuxiliaryProfilesEnabled = cvar.kAutofillAuxiliaryProfilesEnabled
 kAutofillPositiveUploadRate = cvar.kAutofillPositiveUploadRate
@@ -688,6 +709,7 @@ kPinnedTabs = cvar.kPinnedTabs
 kDisable3DAPIs = cvar.kDisable3DAPIs
 kEnableHyperlinkAuditing = cvar.kEnableHyperlinkAuditing
 kEnableReferrers = cvar.kEnableReferrers
+kEnableDoNotTrack = cvar.kEnableDoNotTrack
 kImportBookmarks = cvar.kImportBookmarks
 kImportHistory = cvar.kImportHistory
 kImportHomepage = cvar.kImportHomepage
@@ -697,23 +719,34 @@ kEnterpriseWebStoreURL = cvar.kEnterpriseWebStoreURL
 kEnterpriseWebStoreName = cvar.kEnterpriseWebStoreName
 kProfileAvatarIndex = cvar.kProfileAvatarIndex
 kProfileName = cvar.kProfileName
+kProfileIsManaged = cvar.kProfileIsManaged
 kInvertNotificationShown = cvar.kInvertNotificationShown
+kPrintingEnabled = cvar.kPrintingEnabled
+kPrintPreviewDisabled = cvar.kPrintPreviewDisabled
+kDefaultManagedModeFilteringBehavior = cvar.kDefaultManagedModeFilteringBehavior
 kCertRevocationCheckingEnabled = cvar.kCertRevocationCheckingEnabled
-kSSL3Enabled = cvar.kSSL3Enabled
-kTLS1Enabled = cvar.kTLS1Enabled
+kSSLVersionMin = cvar.kSSLVersionMin
+kSSLVersionMax = cvar.kSSLVersionMax
 kCipherSuiteBlacklist = cvar.kCipherSuiteBlacklist
 kEnableOriginBoundCerts = cvar.kEnableOriginBoundCerts
 kDisableSSLRecordSplitting = cvar.kDisableSSLRecordSplitting
 kEnableMemoryInfo = cvar.kEnableMemoryInfo
+kGLVendorString = cvar.kGLVendorString
+kGLRendererString = cvar.kGLRendererString
+kGLVersionString = cvar.kGLVersionString
 kMetricsClientID = cvar.kMetricsClientID
 kMetricsSessionID = cvar.kMetricsSessionID
+kMetricsLowEntropySource = cvar.kMetricsLowEntropySource
 kMetricsClientIDTimestamp = cvar.kMetricsClientIDTimestamp
 kMetricsReportingEnabled = cvar.kMetricsReportingEnabled
 kMetricsInitialLogsXml = cvar.kMetricsInitialLogsXml
 kMetricsInitialLogsProto = cvar.kMetricsInitialLogsProto
 kMetricsOngoingLogsXml = cvar.kMetricsOngoingLogsXml
 kMetricsOngoingLogsProto = cvar.kMetricsOngoingLogsProto
+kBookmarkPromptEnabled = cvar.kBookmarkPromptEnabled
+kBookmarkPromptImpressionCount = cvar.kBookmarkPromptImpressionCount
 kVariationsSeed = cvar.kVariationsSeed
+kVariationsSeedDate = cvar.kVariationsSeedDate
 kProfileLastUsed = cvar.kProfileLastUsed
 kProfilesLastActive = cvar.kProfilesLastActive
 kProfilesNumCreated = cvar.kProfilesNumCreated
@@ -747,6 +780,7 @@ kStabilityPluginName = cvar.kStabilityPluginName
 kStabilityPluginLaunches = cvar.kStabilityPluginLaunches
 kStabilityPluginInstances = cvar.kStabilityPluginInstances
 kStabilityPluginCrashes = cvar.kStabilityPluginCrashes
+kStabilityPluginLoadingErrors = cvar.kStabilityPluginLoadingErrors
 kUninstallMetricsPageLoadCount = cvar.kUninstallMetricsPageLoadCount
 kUninstallLaunchCount = cvar.kUninstallLaunchCount
 kUninstallMetricsInstallDate = cvar.kUninstallMetricsInstallDate
@@ -764,7 +798,8 @@ kDownloadDirUpgraded = cvar.kDownloadDirUpgraded
 kSaveFileDefaultDirectory = cvar.kSaveFileDefaultDirectory
 kSaveFileType = cvar.kSaveFileType
 kAllowFileSelectionDialogs = cvar.kAllowFileSelectionDialogs
-kLastUsedFileBrowserHandlers = cvar.kLastUsedFileBrowserHandlers
+kDefaultTasksByMimeType = cvar.kDefaultTasksByMimeType
+kDefaultTasksBySuffix = cvar.kDefaultTasksBySuffix
 kSelectFileLastDirectory = cvar.kSelectFileLastDirectory
 kHungPluginDetectFrequency = cvar.kHungPluginDetectFrequency
 kPluginMessageResponseTimeout = cvar.kPluginMessageResponseTimeout
@@ -777,7 +812,7 @@ kSafeBrowsingWrappedKey = cvar.kSafeBrowsingWrappedKey
 kOptionsWindowLastTabIndex = cvar.kOptionsWindowLastTabIndex
 kContentSettingsWindowLastTabIndex = cvar.kContentSettingsWindowLastTabIndex
 kCertificateManagerWindowLastTabIndex = cvar.kCertificateManagerWindowLastTabIndex
-kShouldShowFirstRunBubble = cvar.kShouldShowFirstRunBubble
+kShowFirstRunBubbleOption = cvar.kShowFirstRunBubbleOption
 kShouldShowWelcomePage = cvar.kShouldShowWelcomePage
 kLastKnownGoogleURL = cvar.kLastKnownGoogleURL
 kLastPromptedGoogleURL = cvar.kLastPromptedGoogleURL
@@ -800,59 +835,30 @@ kDisablePluginFinder = cvar.kDisablePluginFinder
 kBrowserActionContainerWidth = cvar.kBrowserActionContainerWidth
 kLastExtensionsUpdateCheck = cvar.kLastExtensionsUpdateCheck
 kNextExtensionsUpdateCheck = cvar.kNextExtensionsUpdateCheck
+kExtensionAlertsInitializedPref = cvar.kExtensionAlertsInitializedPref
+kExtensionAllowedInstallSites = cvar.kExtensionAllowedInstallSites
+kExtensionAllowedTypes = cvar.kExtensionAllowedTypes
+kExtensionBlacklistUpdateVersion = cvar.kExtensionBlacklistUpdateVersion
 kExtensionInstallAllowList = cvar.kExtensionInstallAllowList
 kExtensionInstallDenyList = cvar.kExtensionInstallDenyList
-kExtensionAlertsInitializedPref = cvar.kExtensionAlertsInitializedPref
 kExtensionInstallForceList = cvar.kExtensionInstallForceList
-kExtensionBlacklistUpdateVersion = cvar.kExtensionBlacklistUpdateVersion
+kExtensionStorageGarbageCollect = cvar.kExtensionStorageGarbageCollect
 kNtpTipsResourceServer = cvar.kNtpTipsResourceServer
-kNtp4IntroDisplayCount = cvar.kNtp4IntroDisplayCount
 kNtpCollapsedForeignSessions = cvar.kNtpCollapsedForeignSessions
 kNtpMostVisitedURLsBlacklist = cvar.kNtpMostVisitedURLsBlacklist
-kNtpPromoResourceCache = cvar.kNtpPromoResourceCache
 kNtpPromoResourceCacheUpdate = cvar.kNtpPromoResourceCacheUpdate
-kNtpPromoIsLoggedInToPlus = cvar.kNtpPromoIsLoggedInToPlus
-kNtpPromoFeatureMask = cvar.kNtpPromoFeatureMask
-kNtpPromoResourceServer = cvar.kNtpPromoResourceServer
 kNtpDateResourceServer = cvar.kNtpDateResourceServer
 kNtpShownBookmarksFolder = cvar.kNtpShownBookmarksFolder
 kNtpShownPage = cvar.kNtpShownPage
-kNtpCustomLogoStart = cvar.kNtpCustomLogoStart
-kNtpCustomLogoEnd = cvar.kNtpCustomLogoEnd
-kNtpPromoVersion = cvar.kNtpPromoVersion
-kNtpPromoLocale = cvar.kNtpPromoLocale
-kNtpPromoStart = cvar.kNtpPromoStart
-kNtpPromoEnd = cvar.kNtpPromoEnd
-kNtpPromoLine = cvar.kNtpPromoLine
-kNtpPromoClosed = cvar.kNtpPromoClosed
-kNtpPromoGroup = cvar.kNtpPromoGroup
-kNtpPromoNumGroups = cvar.kNtpPromoNumGroups
-kNtpPromoInitialSegment = cvar.kNtpPromoInitialSegment
-kNtpPromoIncrement = cvar.kNtpPromoIncrement
-kNtpPromoGroupTimeSlice = cvar.kNtpPromoGroupTimeSlice
-kNtpPromoGroupMax = cvar.kNtpPromoGroupMax
-kNtpPromoViews = cvar.kNtpPromoViews
-kNtpPromoViewsMax = cvar.kNtpPromoViewsMax
-kNtpPromoPlatform = cvar.kNtpPromoPlatform
-kNtpPromoBuild = cvar.kNtpPromoBuild
+kNtpPromoDesktopSessionFound = cvar.kNtpPromoDesktopSessionFound
 kNtpWebStoreEnabled = cvar.kNtpWebStoreEnabled
-kNtpWebStorePromoLastId = cvar.kNtpWebStorePromoLastId
-kNtpWebStorePromoId = cvar.kNtpWebStorePromoId
-kNtpWebStorePromoHeader = cvar.kNtpWebStorePromoHeader
-kNtpWebStorePromoButton = cvar.kNtpWebStorePromoButton
-kNtpWebStorePromoLink = cvar.kNtpWebStorePromoLink
-kNtpWebStorePromoLogo = cvar.kNtpWebStorePromoLogo
-kNtpWebStorePromoLogoSource = cvar.kNtpWebStorePromoLogoSource
-kNtpWebStorePromoExpire = cvar.kNtpWebStorePromoExpire
-kNtpWebStorePromoUserGroup = cvar.kNtpWebStorePromoUserGroup
 kNtpAppPageNames = cvar.kNtpAppPageNames
-kNtpHideWebStorePromo = cvar.kNtpHideWebStorePromo
 kDevToolsDisabled = cvar.kDevToolsDisabled
-kDevToolsOpenDocked = cvar.kDevToolsOpenDocked
 kDevToolsDockSide = cvar.kDevToolsDockSide
-kDevToolsHSplitLocation = cvar.kDevToolsHSplitLocation
-kDevToolsVSplitLocation = cvar.kDevToolsVSplitLocation
 kDevToolsEditedFiles = cvar.kDevToolsEditedFiles
+kDevToolsHSplitLocation = cvar.kDevToolsHSplitLocation
+kDevToolsOpenDocked = cvar.kDevToolsOpenDocked
+kDevToolsVSplitLocation = cvar.kDevToolsVSplitLocation
 kSyncLastSyncedTime = cvar.kSyncLastSyncedTime
 kSyncHasSetupCompleted = cvar.kSyncHasSetupCompleted
 kSyncKeepEverythingSynced = cvar.kSyncKeepEverythingSynced
@@ -868,32 +874,43 @@ kSyncThemes = cvar.kSyncThemes
 kSyncTypedUrls = cvar.kSyncTypedUrls
 kSyncExtensions = cvar.kSyncExtensions
 kSyncExtensionSettings = cvar.kSyncExtensionSettings
+kSyncHistoryDeleteDirectives = cvar.kSyncHistoryDeleteDirectives
 kSyncManaged = cvar.kSyncManaged
 kSyncSearchEngines = cvar.kSyncSearchEngines
 kSyncSessions = cvar.kSyncSessions
 kSyncSuppressStart = cvar.kSyncSuppressStart
+kGoogleServicesLastUsername = cvar.kGoogleServicesLastUsername
 kGoogleServicesUsername = cvar.kGoogleServicesUsername
+kGoogleServicesUsernamePattern = cvar.kGoogleServicesUsernamePattern
 kSyncUsingSecondaryPassphrase = cvar.kSyncUsingSecondaryPassphrase
 kSyncEncryptionBootstrapToken = cvar.kSyncEncryptionBootstrapToken
+kSyncKeystoreEncryptionBootstrapToken = cvar.kSyncKeystoreEncryptionBootstrapToken
 kSyncAcknowledgedSyncTypes = cvar.kSyncAcknowledgedSyncTypes
 kSyncMaxInvalidationVersions = cvar.kSyncMaxInvalidationVersions
 kSyncSessionsGUID = cvar.kSyncSessionsGUID
+kInvalidatorInvalidationState = cvar.kInvalidatorInvalidationState
+kInvalidatorMaxInvalidationVersions = cvar.kInvalidatorMaxInvalidationVersions
 kSyncPromoStartupCount = cvar.kSyncPromoStartupCount
 kSyncPromoViewCount = cvar.kSyncPromoViewCount
 kSyncPromoUserSkipped = cvar.kSyncPromoUserSkipped
 kSyncPromoShowOnFirstRunAllowed = cvar.kSyncPromoShowOnFirstRunAllowed
 kSyncPromoShowNTPBubble = cvar.kSyncPromoShowNTPBubble
+kSyncPromoErrorMessage = cvar.kSyncPromoErrorMessage
 kProfileGAIAInfoUpdateTime = cvar.kProfileGAIAInfoUpdateTime
 kProfileGAIAInfoPictureURL = cvar.kProfileGAIAInfoPictureURL
 kWebAppCreateOnDesktop = cvar.kWebAppCreateOnDesktop
 kWebAppCreateInAppsMenu = cvar.kWebAppCreateInAppsMenu
 kWebAppCreateInQuickLaunchBar = cvar.kWebAppCreateInQuickLaunchBar
 kGeolocationAccessToken = cvar.kGeolocationAccessToken
-kGeolocationDefaultContentSetting = cvar.kGeolocationDefaultContentSetting
-kGeolocationContentSettings = cvar.kGeolocationContentSettings
+kDefaultAudioCaptureDevice = cvar.kDefaultAudioCaptureDevice
+kDefaultVideoCaptureDevice = cvar.kDefaultVideoCaptureDevice
 kRemoteAccessHostFirewallTraversal = cvar.kRemoteAccessHostFirewallTraversal
-kPrintingEnabled = cvar.kPrintingEnabled
-kPrintPreviewDisabled = cvar.kPrintPreviewDisabled
+kRemoteAccessHostRequireTwoFactor = cvar.kRemoteAccessHostRequireTwoFactor
+kRemoteAccessHostDomain = cvar.kRemoteAccessHostDomain
+kRemoteAccessHostTalkGadgetPrefix = cvar.kRemoteAccessHostTalkGadgetPrefix
+kRemoteAccessHostRequireCurtain = cvar.kRemoteAccessHostRequireCurtain
+kPrintPreviewStickySettings = cvar.kPrintPreviewStickySettings
+kCloudPrintRoot = cvar.kCloudPrintRoot
 kCloudPrintServiceURL = cvar.kCloudPrintServiceURL
 kCloudPrintSigninURL = cvar.kCloudPrintSigninURL
 kCloudPrintDialogWidth = cvar.kCloudPrintDialogWidth
@@ -909,8 +926,12 @@ kCloudPrintPrintSystemSettings = cvar.kCloudPrintPrintSystemSettings
 kCloudPrintEnableJobPoll = cvar.kCloudPrintEnableJobPoll
 kCloudPrintRobotRefreshToken = cvar.kCloudPrintRobotRefreshToken
 kCloudPrintRobotEmail = cvar.kCloudPrintRobotEmail
-kVirtualPrinterDriverEnabled = cvar.kVirtualPrinterDriverEnabled
+kCloudPrintConnectNewPrinters = cvar.kCloudPrintConnectNewPrinters
+kCloudPrintXmppPingEnabled = cvar.kCloudPrintXmppPingEnabled
+kCloudPrintXmppPingTimeout = cvar.kCloudPrintXmppPingTimeout
+kCloudPrintPrinterBlacklist = cvar.kCloudPrintPrinterBlacklist
 kCloudPrintSubmitEnabled = cvar.kCloudPrintSubmitEnabled
+kChromeToMobileDeviceList = cvar.kChromeToMobileDeviceList
 kProxy = cvar.kProxy
 kMaxConnectionsPerProxy = cvar.kMaxConnectionsPerProxy
 kManagedDefaultCookiesSetting = cvar.kManagedDefaultCookiesSetting
@@ -920,6 +941,7 @@ kManagedDefaultPluginsSetting = cvar.kManagedDefaultPluginsSetting
 kManagedDefaultPopupsSetting = cvar.kManagedDefaultPopupsSetting
 kManagedDefaultGeolocationSetting = cvar.kManagedDefaultGeolocationSetting
 kManagedDefaultNotificationsSetting = cvar.kManagedDefaultNotificationsSetting
+kManagedDefaultMediaStreamSetting = cvar.kManagedDefaultMediaStreamSetting
 kManagedCookiesAllowedForUrls = cvar.kManagedCookiesAllowedForUrls
 kManagedCookiesBlockedForUrls = cvar.kManagedCookiesBlockedForUrls
 kManagedCookiesSessionOnlyForUrls = cvar.kManagedCookiesSessionOnlyForUrls
@@ -934,11 +956,15 @@ kManagedPopupsBlockedForUrls = cvar.kManagedPopupsBlockedForUrls
 kManagedNotificationsAllowedForUrls = cvar.kManagedNotificationsAllowedForUrls
 kManagedNotificationsBlockedForUrls = cvar.kManagedNotificationsBlockedForUrls
 kManagedAutoSelectCertificateForUrls = cvar.kManagedAutoSelectCertificateForUrls
+kAudioCaptureAllowed = cvar.kAudioCaptureAllowed
+kVideoCaptureAllowed = cvar.kVideoCaptureAllowed
 kClearPluginLSODataEnabled = cvar.kClearPluginLSODataEnabled
+kPepperFlashSettingsEnabled = cvar.kPepperFlashSettingsEnabled
 kDiskCacheDir = cvar.kDiskCacheDir
 kDiskCacheSize = cvar.kDiskCacheSize
 kMediaCacheSize = cvar.kMediaCacheSize
 kChromeOsReleaseChannel = cvar.kChromeOsReleaseChannel
+kTabStripLayoutType = cvar.kTabStripLayoutType
 kRegisteredBackgroundContents = cvar.kRegisteredBackgroundContents
 kShownAutoLaunchInfobar = cvar.kShownAutoLaunchInfobar
 kAuthSchemes = cvar.kAuthSchemes
@@ -947,21 +973,29 @@ kEnableAuthNegotiatePort = cvar.kEnableAuthNegotiatePort
 kAuthServerWhitelist = cvar.kAuthServerWhitelist
 kAuthNegotiateDelegateWhitelist = cvar.kAuthNegotiateDelegateWhitelist
 kGSSAPILibraryName = cvar.kGSSAPILibraryName
+kSpdyProxyOrigin = cvar.kSpdyProxyOrigin
 kAllowCrossOriginAuthPrompt = cvar.kAllowCrossOriginAuthPrompt
+kBuiltInDnsClientEnabled = cvar.kBuiltInDnsClientEnabled
+kHttpReceivedContentLength = cvar.kHttpReceivedContentLength
+kHttpOriginalContentLength = cvar.kHttpOriginalContentLength
 kRegisteredProtocolHandlers = cvar.kRegisteredProtocolHandlers
 kIgnoredProtocolHandlers = cvar.kIgnoredProtocolHandlers
 kCustomHandlersEnabled = cvar.kCustomHandlersEnabled
 kUserCreatedLoginItem = cvar.kUserCreatedLoginItem
+kUserRemovedLoginItem = cvar.kUserRemovedLoginItem
 kBackgroundModeEnabled = cvar.kBackgroundModeEnabled
 kDevicePolicyRefreshRate = cvar.kDevicePolicyRefreshRate
 kUserPolicyRefreshRate = cvar.kUserPolicyRefreshRate
+kLoadCloudPolicyOnSignin = cvar.kLoadCloudPolicyOnSignin
+kFactoryResetRequested = cvar.kFactoryResetRequested
 kRecoveryComponentVersion = cvar.kRecoveryComponentVersion
 kComponentUpdaterState = cvar.kComponentUpdaterState
-kRestoreSessionStateDialogShown = cvar.kRestoreSessionStateDialogShown
-kWebIntentsEnabled = cvar.kWebIntentsEnabled
+kMediaGalleriesUniqueId = cvar.kMediaGalleriesUniqueId
+kMediaGalleriesRememberedGalleries = cvar.kMediaGalleriesRememberedGalleries
 kInManagedMode = cvar.kInManagedMode
 kNetworkProfileWarningsLeft = cvar.kNetworkProfileWarningsLeft
 kNetworkProfileLastWarningTime = cvar.kNetworkProfileLastWarningTime
+kLastPolicyStatisticsUpdate = cvar.kLastPolicyStatisticsUpdate
 CERT_STATUS_ALL_ERRORS = cvar.CERT_STATUS_ALL_ERRORS
 CERT_STATUS_COMMON_NAME_INVALID = cvar.CERT_STATUS_COMMON_NAME_INVALID
 CERT_STATUS_DATE_INVALID = cvar.CERT_STATUS_DATE_INVALID
@@ -971,159 +1005,10 @@ CERT_STATUS_UNABLE_TO_CHECK_REVOCATION = cvar.CERT_STATUS_UNABLE_TO_CHECK_REVOCA
 CERT_STATUS_REVOKED = cvar.CERT_STATUS_REVOKED
 CERT_STATUS_INVALID = cvar.CERT_STATUS_INVALID
 CERT_STATUS_WEAK_SIGNATURE_ALGORITHM = cvar.CERT_STATUS_WEAK_SIGNATURE_ALGORITHM
-CERT_STATUS_NOT_IN_DNS = cvar.CERT_STATUS_NOT_IN_DNS
 CERT_STATUS_NON_UNIQUE_NAME = cvar.CERT_STATUS_NON_UNIQUE_NAME
 CERT_STATUS_WEAK_KEY = cvar.CERT_STATUS_WEAK_KEY
 CERT_STATUS_IS_EV = cvar.CERT_STATUS_IS_EV
 CERT_STATUS_REV_CHECKING_ENABLED = cvar.CERT_STATUS_REV_CHECKING_ENABLED
-CERT_STATUS_IS_DNSSEC = cvar.CERT_STATUS_IS_DNSSEC
-
-class scoped_refptr__TabProxy(_object):
-    """Proxy of C++ scoped_refptr<(TabProxy)> class"""
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, scoped_refptr__TabProxy, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, scoped_refptr__TabProxy, name)
-    __repr__ = _swig_repr
-    def __init__(self, *args): 
-        """
-        __init__(self) -> scoped_refptr__TabProxy
-        __init__(self, TabProxy p) -> scoped_refptr__TabProxy
-        """
-        this = _pyautolib.new_scoped_refptr__TabProxy(*args)
-        try: self.this.append(this)
-        except: self.this = this
-    __swig_destroy__ = _pyautolib.delete_scoped_refptr__TabProxy
-    __del__ = lambda self : None;
-    def get(self):
-        """get(self) -> TabProxy"""
-        return _pyautolib.scoped_refptr__TabProxy_get(self)
-
-    def __deref__(self):
-        """__deref__(self) -> TabProxy"""
-        return _pyautolib.scoped_refptr__TabProxy___deref__(self)
-
-    def NavigateToURL(self, *args):
-        """
-        NavigateToURL(self, GURL url) -> AutomationMsg_NavigationResponseValues
-
-        Navigates to a given GURL. Blocks until the navigation completes. 
-        """
-        return _pyautolib.scoped_refptr__TabProxy_NavigateToURL(self, *args)
-
-    def NavigateToURLBlockUntilNavigationsComplete(self, *args):
-        """
-        NavigateToURLBlockUntilNavigationsComplete(self, GURL url, int number_of_navigations) -> AutomationMsg_NavigationResponseValues
-
-        Navigates to a given GURL. Blocks until the given number of navigations complete.
-        """
-        return _pyautolib.scoped_refptr__TabProxy_NavigateToURLBlockUntilNavigationsComplete(self, *args)
-
-    def NavigateToURLAsync(self, *args):
-        """
-        NavigateToURLAsync(self, GURL url) -> bool
-
-        Navigates to a given GURL asynchronously. Does not wait for the navigation to complete, or even begin; Use NavigateToURL() if you want to wait.
-        """
-        return _pyautolib.scoped_refptr__TabProxy_NavigateToURLAsync(self, *args)
-
-    def GoBack(self):
-        """
-        GoBack(self) -> AutomationMsg_NavigationResponseValues
-
-        Equivalent to hitting the Back button. Blocks until navigation completes.
-        """
-        return _pyautolib.scoped_refptr__TabProxy_GoBack(self)
-
-    def GoForward(self):
-        """
-        GoForward(self) -> AutomationMsg_NavigationResponseValues
-
-        Equivalent to hitting the Forward button. Blocks until navigation completes.
-        """
-        return _pyautolib.scoped_refptr__TabProxy_GoForward(self)
-
-    def Reload(self):
-        """
-        Reload(self) -> AutomationMsg_NavigationResponseValues
-
-        Equivalent to hitting the Reload button. Blocks until navigation completes.
-        """
-        return _pyautolib.scoped_refptr__TabProxy_Reload(self)
-
-    def Close(self, *args):
-        """
-        Close(self) -> bool
-        Close(self, bool wait_until_closed) -> bool
-
-        Closes the tab. Supply True to wait until the tab has closed, else it'll wait only until the call has been initiated. Be careful while closing the last tab since it might close the browser.
-        """
-        return _pyautolib.scoped_refptr__TabProxy_Close(self, *args)
-
-    def WaitForTabToBeRestored(self, *args):
-        """
-        WaitForTabToBeRestored(self, uint32 timeout_ms) -> bool
-
-        Blocks until tab is completely restored.
-        """
-        return _pyautolib.scoped_refptr__TabProxy_WaitForTabToBeRestored(self, *args)
-
-    def TakeActionOnSSLBlockingPage(self, *args):
-        """
-        TakeActionOnSSLBlockingPage(self, bool proceed) -> bool
-
-        Simulates user action on the SSL blocking page.if |proceed| is true, this is equivalent to clicking the 'Proceed' button, if false to 'Take me out of there' button.
-        """
-        return _pyautolib.scoped_refptr__TabProxy_TakeActionOnSSLBlockingPage(self, *args)
-
-    def GetSecurityState(self):
-        """
-        GetSecurityState(self) -> PyObject
-
-        Retrieves the different security states for the current tab.
-        """
-        return _pyautolib.scoped_refptr__TabProxy_GetSecurityState(self)
-
-    def GetPageType(self):
-        """
-        GetPageType(self) -> PyObject
-
-        Returns the type of page currently showing (normal, interstitial, error.
-        """
-        return _pyautolib.scoped_refptr__TabProxy_GetPageType(self)
-
-scoped_refptr__TabProxy_swigregister = _pyautolib.scoped_refptr__TabProxy_swigregister
-scoped_refptr__TabProxy_swigregister(scoped_refptr__TabProxy)
-
-class GURL(_object):
-    """Represent a URL. Call spec() to get the string."""
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, GURL, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, GURL, name)
-    __repr__ = _swig_repr
-    def __init__(self, *args): 
-        """
-        __init__(self) -> GURL
-        __init__(self, string url_string) -> GURL
-
-        Represent a URL. Call spec() to get the string.
-        """
-        this = _pyautolib.new_GURL(*args)
-        try: self.this.append(this)
-        except: self.this = this
-    def spec(self):
-        """
-        spec(self) -> string
-
-        Get the string representation.
-        """
-        return _pyautolib.GURL_spec(self)
-
-    __swig_destroy__ = _pyautolib.delete_GURL
-    __del__ = lambda self : None;
-GURL_swigregister = _pyautolib.GURL_swigregister
-GURL_swigregister(GURL)
 
 class FilePath(_object):
     """Represent a file path. Call value() to get the string."""
@@ -1154,141 +1039,6 @@ class FilePath(_object):
     __del__ = lambda self : None;
 FilePath_swigregister = _pyautolib.FilePath_swigregister
 FilePath_swigregister(FilePath)
-
-class BrowserProxy(_object):
-    """Proxy handle to a browser window."""
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, BrowserProxy, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, BrowserProxy, name)
-    def __init__(self, *args, **kwargs): raise AttributeError("No constructor defined")
-    __repr__ = _swig_repr
-    def ActivateTab(self, *args):
-        """
-        ActivateTab(self, int tab_index) -> bool
-
-        Activate the tab at the given zero-based index
-        """
-        return _pyautolib.BrowserProxy_ActivateTab(self, *args)
-
-    def BringToFront(self):
-        """
-        BringToFront(self) -> bool
-
-        Activate the browser's window and bring it to front.
-        """
-        return _pyautolib.BrowserProxy_BringToFront(self)
-
-    def GetTab(self, *args):
-        """
-        GetTab(self, int tab_index) -> scoped_refptr__TabProxy
-
-        Get proxy to the tab at the given zero-based index
-        """
-        return _pyautolib.BrowserProxy_GetTab(self, *args)
-
-BrowserProxy_swigregister = _pyautolib.BrowserProxy_swigregister
-BrowserProxy_swigregister(BrowserProxy)
-
-class TabProxy(_object):
-    """Proxy handle to a tab."""
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, TabProxy, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, TabProxy, name)
-    def __init__(self, *args, **kwargs): raise AttributeError("No constructor defined")
-    __repr__ = _swig_repr
-    def NavigateToURL(self, *args):
-        """
-        NavigateToURL(self, GURL url) -> AutomationMsg_NavigationResponseValues
-
-        Navigates to a given GURL. Blocks until the navigation completes. 
-        """
-        return _pyautolib.TabProxy_NavigateToURL(self, *args)
-
-    def NavigateToURLBlockUntilNavigationsComplete(self, *args):
-        """
-        NavigateToURLBlockUntilNavigationsComplete(self, GURL url, int number_of_navigations) -> AutomationMsg_NavigationResponseValues
-
-        Navigates to a given GURL. Blocks until the given number of navigations complete.
-        """
-        return _pyautolib.TabProxy_NavigateToURLBlockUntilNavigationsComplete(self, *args)
-
-    def NavigateToURLAsync(self, *args):
-        """
-        NavigateToURLAsync(self, GURL url) -> bool
-
-        Navigates to a given GURL asynchronously. Does not wait for the navigation to complete, or even begin; Use NavigateToURL() if you want to wait.
-        """
-        return _pyautolib.TabProxy_NavigateToURLAsync(self, *args)
-
-    def GoBack(self):
-        """
-        GoBack(self) -> AutomationMsg_NavigationResponseValues
-
-        Equivalent to hitting the Back button. Blocks until navigation completes.
-        """
-        return _pyautolib.TabProxy_GoBack(self)
-
-    def GoForward(self):
-        """
-        GoForward(self) -> AutomationMsg_NavigationResponseValues
-
-        Equivalent to hitting the Forward button. Blocks until navigation completes.
-        """
-        return _pyautolib.TabProxy_GoForward(self)
-
-    def Reload(self):
-        """
-        Reload(self) -> AutomationMsg_NavigationResponseValues
-
-        Equivalent to hitting the Reload button. Blocks until navigation completes.
-        """
-        return _pyautolib.TabProxy_Reload(self)
-
-    def Close(self, *args):
-        """
-        Close(self) -> bool
-        Close(self, bool wait_until_closed) -> bool
-
-        Closes the tab. Supply True to wait until the tab has closed, else it'll wait only until the call has been initiated. Be careful while closing the last tab since it might close the browser.
-        """
-        return _pyautolib.TabProxy_Close(self, *args)
-
-    def WaitForTabToBeRestored(self, *args):
-        """
-        WaitForTabToBeRestored(self, uint32 timeout_ms) -> bool
-
-        Blocks until tab is completely restored.
-        """
-        return _pyautolib.TabProxy_WaitForTabToBeRestored(self, *args)
-
-    def TakeActionOnSSLBlockingPage(self, *args):
-        """
-        TakeActionOnSSLBlockingPage(self, bool proceed) -> bool
-
-        Simulates user action on the SSL blocking page.if |proceed| is true, this is equivalent to clicking the 'Proceed' button, if false to 'Take me out of there' button.
-        """
-        return _pyautolib.TabProxy_TakeActionOnSSLBlockingPage(self, *args)
-
-    def GetSecurityState(self):
-        """
-        GetSecurityState(self) -> PyObject
-
-        Retrieves the different security states for the current tab.
-        """
-        return _pyautolib.TabProxy_GetSecurityState(self)
-
-    def GetPageType(self):
-        """
-        GetPageType(self) -> PyObject
-
-        Returns the type of page currently showing (normal, interstitial, error.
-        """
-        return _pyautolib.TabProxy_GetPageType(self)
-
-TabProxy_swigregister = _pyautolib.TabProxy_swigregister
-TabProxy_swigregister(TabProxy)
 
 class PyUITestSuiteBase(_object):
     """Proxy of C++ PyUITestSuiteBase class"""
@@ -1356,6 +1106,22 @@ class PyUITestBase(_object):
         """
         return _pyautolib.PyUITestBase_AppendBrowserLaunchSwitch(self, *args)
 
+    def BeginTracing(self, *args):
+        """
+        BeginTracing(self, string categories) -> bool
+
+        Begins tracing with the given category string.
+        """
+        return _pyautolib.PyUITestBase_BeginTracing(self, *args)
+
+    def EndTracing(self):
+        """
+        EndTracing(self) -> string
+
+        Ends tracing and returns the collected events.
+        """
+        return _pyautolib.PyUITestBase_EndTracing(self)
+
     def UseNamedChannelID(self, *args):
         """UseNamedChannelID(self, string named_channel_id)"""
         return _pyautolib.PyUITestBase_UseNamedChannelID(self, *args)
@@ -1375,38 +1141,6 @@ class PyUITestBase(_object):
         Closes all windows and destroys the browser.
         """
         return _pyautolib.PyUITestBase_TearDown(self)
-
-    def action_max_timeout_ms(self):
-        """
-        action_max_timeout_ms(self) -> int
-
-        Timeout (in milli secs) for an action. This value is also used as default for the WaitUntil() method.
-        """
-        return _pyautolib.PyUITestBase_action_max_timeout_ms(self)
-
-    def action_timeout_ms(self):
-        """
-        action_timeout_ms(self) -> int
-
-        Get the timeout (in milli secs) for an automation call
-        """
-        return _pyautolib.PyUITestBase_action_timeout_ms(self)
-
-    def set_action_timeout_ms(self, *args):
-        """
-        set_action_timeout_ms(self, int timeout)
-
-        Set the timeout (in milli secs) for an automation call.  This is an internal method.  Do not use this directly.  Use ActionTimeoutChanger instead
-        """
-        return _pyautolib.PyUITestBase_set_action_timeout_ms(self, *args)
-
-    def large_test_timeout_ms(self):
-        """
-        large_test_timeout_ms(self) -> int
-
-        Timeout (in milli secs) for large tests.
-        """
-        return _pyautolib.PyUITestBase_large_test_timeout_ms(self)
 
     def LaunchBrowserAndServer(self):
         """
@@ -1440,60 +1174,6 @@ class PyUITestBase(_object):
         """
         return _pyautolib.PyUITestBase_set_clear_profile(self, *args)
 
-    def NavigateToURL(self, *args):
-        """
-        NavigateToURL(self, char url_string)
-        NavigateToURL(self, char url_string, int window_index)
-        NavigateToURL(self, char url_string, int window_index, int tab_index)
-
-        Navigate to the given url in the given tab and given window (or active tab in first window if indexes not given). Note that this method also activates the corresponding tab/window if it's not active already. Blocks until page has loaded.
-        """
-        return _pyautolib.PyUITestBase_NavigateToURL(self, *args)
-
-    def ReloadActiveTab(self, window_index = 0):
-        """
-        ReloadActiveTab(self, int window_index = 0)
-        ReloadActiveTab(self)
-
-        Reload the active tab in the given window (or first window if index not given). Blocks until page has reloaded.
-        """
-        return _pyautolib.PyUITestBase_ReloadActiveTab(self, window_index)
-
-    def ApplyAccelerator(self, *args):
-        """
-        ApplyAccelerator(self, int id, int window_index = 0) -> bool
-        ApplyAccelerator(self, int id) -> bool
-
-        Apply the accelerator with given id (IDC_BACK, IDC_NEWTAB ...) to the given or first window. The list can be found at chrome/app/chrome_dll_resource.h. Note that this method just schedules the accelerator, but does not wait for it to actually finish doing anything.Returns True on success.
-        """
-        return _pyautolib.PyUITestBase_ApplyAccelerator(self, *args)
-
-    def RunCommand(self, *args):
-        """
-        RunCommand(self, int browser_command, int window_index = 0) -> bool
-        RunCommand(self, int browser_command) -> bool
-
-        Like ApplyAccelerator, except that it waits for the command to execute.
-        """
-        return _pyautolib.PyUITestBase_RunCommand(self, *args)
-
-    def IsMenuCommandEnabled(self, *args):
-        """
-        IsMenuCommandEnabled(self, int browser_command, int window_index = 0) -> bool
-        IsMenuCommandEnabled(self, int browser_command) -> bool
-
-        Returns true if the given command id is enabled on the given window.
-        """
-        return _pyautolib.PyUITestBase_IsMenuCommandEnabled(self, *args)
-
-    def GetDownloadDirectory(self):
-        """
-        GetDownloadDirectory(self) -> FilePath
-
-        Get the path to download directory.
-        """
-        return _pyautolib.PyUITestBase_GetDownloadDirectory(self)
-
     def user_data_dir(self):
         """
         user_data_dir(self) -> FilePath
@@ -1501,229 +1181,6 @@ class PyUITestBase(_object):
         Get the path to profile directory.
         """
         return _pyautolib.PyUITestBase_user_data_dir(self)
-
-    def SetDownloadShelfVisible(self, *args):
-        """
-        SetDownloadShelfVisible(self, bool is_visible, int window_index = 0)
-        SetDownloadShelfVisible(self, bool is_visible)
-
-        Set download shelf visibility for the given or first browser window.
-        """
-        return _pyautolib.PyUITestBase_SetDownloadShelfVisible(self, *args)
-
-    def IsDownloadShelfVisible(self, window_index = 0):
-        """
-        IsDownloadShelfVisible(self, int window_index = 0) -> bool
-        IsDownloadShelfVisible(self) -> bool
-
-        Determine if the download shelf is visible in the given or first browser window.
-        """
-        return _pyautolib.PyUITestBase_IsDownloadShelfVisible(self, window_index)
-
-    def GetBookmarkBarVisibility(self):
-        """
-        GetBookmarkBarVisibility(self) -> bool
-
-        Determine if the bookmark bar is visible. If the NTP is visible, only return true if attached (to the chrome).
-        """
-        return _pyautolib.PyUITestBase_GetBookmarkBarVisibility(self)
-
-    def IsBookmarkBarDetached(self):
-        """
-        IsBookmarkBarDetached(self) -> bool
-
-        Determine if the bookmark bar is detached. This usually is only true on the NTP.
-        """
-        return _pyautolib.PyUITestBase_IsBookmarkBarDetached(self)
-
-    def WaitForBookmarkBarVisibilityChange(self, *args):
-        """
-        WaitForBookmarkBarVisibilityChange(self, bool wait_for_open) -> bool
-
-        Wait for the bookmark bar animation to complete. |wait_for_open| specifies which kind of change we wait for.
-        """
-        return _pyautolib.PyUITestBase_WaitForBookmarkBarVisibilityChange(self, *args)
-
-    def _GetBookmarksAsJSON(self):
-        """
-        _GetBookmarksAsJSON(self) -> string
-
-        Get the bookmarks as a JSON string.  Internal method.
-        """
-        return _pyautolib.PyUITestBase__GetBookmarksAsJSON(self)
-
-    def AddBookmarkGroup(self, *args):
-        """
-        AddBookmarkGroup(self, wstring parent_id, int index, wstring title) -> bool
-
-        Add a bookmark folder with the given index in the parent.  |title| is the title/name of the folder.
-        """
-        return _pyautolib.PyUITestBase_AddBookmarkGroup(self, *args)
-
-    def AddBookmarkURL(self, *args):
-        """
-        AddBookmarkURL(self, wstring parent_id, int index, wstring title, wstring url) -> bool
-
-        Add a bookmark with the given title and URL.
-        """
-        return _pyautolib.PyUITestBase_AddBookmarkURL(self, *args)
-
-    def ReparentBookmark(self, *args):
-        """
-        ReparentBookmark(self, wstring id, wstring new_parent_id, int index) -> bool
-
-        Move a bookmark to a new parent.
-        """
-        return _pyautolib.PyUITestBase_ReparentBookmark(self, *args)
-
-    def SetBookmarkTitle(self, *args):
-        """
-        SetBookmarkTitle(self, wstring id, wstring title) -> bool
-
-        Set the title of a bookmark.
-        """
-        return _pyautolib.PyUITestBase_SetBookmarkTitle(self, *args)
-
-    def SetBookmarkURL(self, *args):
-        """
-        SetBookmarkURL(self, wstring id, wstring url) -> bool
-
-        Set the URL of a bookmark.
-        """
-        return _pyautolib.PyUITestBase_SetBookmarkURL(self, *args)
-
-    def RemoveBookmark(self, *args):
-        """
-        RemoveBookmark(self, wstring id) -> bool
-
-        Remove (delete) a bookmark.
-        """
-        return _pyautolib.PyUITestBase_RemoveBookmark(self, *args)
-
-    def OpenFindInPage(self, window_index = 0):
-        """
-        OpenFindInPage(self, int window_index = 0)
-        OpenFindInPage(self)
-
-        Open the Find box in the given or first browser window.
-        """
-        return _pyautolib.PyUITestBase_OpenFindInPage(self, window_index)
-
-    def IsFindInPageVisible(self, window_index = 0):
-        """
-        IsFindInPageVisible(self, int window_index = 0) -> bool
-        IsFindInPageVisible(self) -> bool
-
-        Determine if the find box is visible in the given or first browser window.
-        """
-        return _pyautolib.PyUITestBase_IsFindInPageVisible(self, window_index)
-
-    def OpenNewBrowserWindow(self, *args):
-        """
-        OpenNewBrowserWindow(self, bool show) -> bool
-
-        Open a new browser window.
-        """
-        return _pyautolib.PyUITestBase_OpenNewBrowserWindow(self, *args)
-
-    def CloseBrowserWindow(self, *args):
-        """
-        CloseBrowserWindow(self, int window_index) -> bool
-
-        Close a browser window.
-        """
-        return _pyautolib.PyUITestBase_CloseBrowserWindow(self, *args)
-
-    def GetBrowserWindowCount(self):
-        """
-        GetBrowserWindowCount(self) -> int
-
-        Fetch the number of browser windows. Includes popups.
-        """
-        return _pyautolib.PyUITestBase_GetBrowserWindowCount(self)
-
-    def GetActiveTabIndex(self, window_index = 0):
-        """
-        GetActiveTabIndex(self, int window_index = 0) -> int
-        GetActiveTabIndex(self) -> int
-
-        Get the index of the active tab in the given or first window. Indexes are zero-based.
-        """
-        return _pyautolib.PyUITestBase_GetActiveTabIndex(self, window_index)
-
-    def ActivateTab(self, *args):
-        """
-        ActivateTab(self, int tab_index, int window_index = 0) -> bool
-        ActivateTab(self, int tab_index) -> bool
-
-        Activate the tab at the given zero-based index in the given or first window.  Also brings the window to the front. Returns True on success.
-        """
-        return _pyautolib.PyUITestBase_ActivateTab(self, *args)
-
-    def GetActiveTabTitle(self, window_index = 0):
-        """
-        GetActiveTabTitle(self, int window_index = 0) -> wstring
-        GetActiveTabTitle(self) -> wstring
-
-        Get the title of the active tab for the given or first window.
-        """
-        return _pyautolib.PyUITestBase_GetActiveTabTitle(self, window_index)
-
-    def GetActiveTabURL(self, window_index = 0):
-        """
-        GetActiveTabURL(self, int window_index = 0) -> GURL
-        GetActiveTabURL(self) -> GURL
-
-        Get the URL for the active tab. for the given or first window. Returns an instance of GURL
-        """
-        return _pyautolib.PyUITestBase_GetActiveTabURL(self, window_index)
-
-    def GetTabCount(self, window_index = 0):
-        """
-        GetTabCount(self, int window_index = 0) -> int
-        GetTabCount(self) -> int
-
-        Count of the number of tabs in the given or first window.
-        """
-        return _pyautolib.PyUITestBase_GetTabCount(self, window_index)
-
-    def AppendTab(self, *args):
-        """
-        AppendTab(self, GURL tab_url, int window_index = 0) -> bool
-        AppendTab(self, GURL tab_url) -> bool
-
-        Create a new tab at the end of given or first browser window and activate it. Blocks until the page is loaded. Returns True on success.
-        """
-        return _pyautolib.PyUITestBase_AppendTab(self, *args)
-
-    def SetCookie(self, *args):
-        """
-        SetCookie(self, GURL cookie_url, string value, int window_index = 0, 
-            int tab_index = 0) -> bool
-        SetCookie(self, GURL cookie_url, string value, int window_index = 0) -> bool
-        SetCookie(self, GURL cookie_url, string value) -> bool
-
-        Set the value of the cookie at cookie_url to value for the given window index and tab index. Returns True on success.
-        """
-        return _pyautolib.PyUITestBase_SetCookie(self, *args)
-
-    def GetCookie(self, *args):
-        """
-        GetCookie(self, GURL cookie_url, int window_index = 0, int tab_index = 0) -> string
-        GetCookie(self, GURL cookie_url, int window_index = 0) -> string
-        GetCookie(self, GURL cookie_url) -> string
-
-        Get the value of the cookie at cookie_url for the given window index and tab index. Returns empty string on error or if there is no value for the cookie.
-        """
-        return _pyautolib.PyUITestBase_GetCookie(self, *args)
-
-    def GetBrowserWindow(self, *args):
-        """
-        GetBrowserWindow(self, int window_index) -> scoped_refptr__BrowserProxy
-
-        Get a proxy to the browser window at the given zero-based index.
-        """
-        return _pyautolib.PyUITestBase_GetBrowserWindow(self, *args)
 
     def _SendJSONRequest(self, *args):
         """
@@ -1733,13 +1190,9 @@ class PyUITestBase(_object):
         """
         return _pyautolib.PyUITestBase__SendJSONRequest(self, *args)
 
-    def ResetToDefaultTheme(self):
-        """
-        ResetToDefaultTheme(self) -> bool
-
-        Resets to the default theme. Returns true on success.
-        """
-        return _pyautolib.PyUITestBase_ResetToDefaultTheme(self)
+    def CheckErrorsAndCrashes(self):
+        """CheckErrorsAndCrashes(self) -> string"""
+        return _pyautolib.PyUITestBase_CheckErrorsAndCrashes(self)
 
     __swig_destroy__ = _pyautolib.delete_PyUITestBase
     __del__ = lambda self : None;
@@ -1760,7 +1213,7 @@ class TestServer(_object):
     def __init__(self, *args): 
         """
         __init__(self, Type type, string host, FilePath document_root) -> TestServer
-        __init__(self, HTTPSOptions https_options, FilePath document_root) -> TestServer
+        __init__(self, Type type, SSLOptions ssl_options, FilePath document_root) -> TestServer
         """
         this = _pyautolib.new_TestServer(*args)
         try: self.this.append(this)
@@ -1822,29 +1275,29 @@ class TestServer(_object):
 TestServer_swigregister = _pyautolib.TestServer_swigregister
 TestServer_swigregister(TestServer)
 
-class HTTPSOptions(_object):
-    """HTTPSOptions. Sets one of three types of a cert"""
+class SSLOptions(_object):
+    """SSLOptions. Sets one of three types of a cert"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, HTTPSOptions, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SSLOptions, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, HTTPSOptions, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, SSLOptions, name)
     __repr__ = _swig_repr
-    CERT_OK = _pyautolib.HTTPSOptions_CERT_OK
-    CERT_MISMATCHED_NAME = _pyautolib.HTTPSOptions_CERT_MISMATCHED_NAME
-    CERT_EXPIRED = _pyautolib.HTTPSOptions_CERT_EXPIRED
+    CERT_OK = _pyautolib.SSLOptions_CERT_OK
+    CERT_MISMATCHED_NAME = _pyautolib.SSLOptions_CERT_MISMATCHED_NAME
+    CERT_EXPIRED = _pyautolib.SSLOptions_CERT_EXPIRED
     def __init__(self, *args): 
         """
-        __init__(self, ServerCertificate cert) -> HTTPSOptions
+        __init__(self, ServerCertificate cert) -> SSLOptions
 
-        HTTPSOptions. Sets one of three types of a cert
+        SSLOptions. Sets one of three types of a cert
         """
-        this = _pyautolib.new_HTTPSOptions(*args)
+        this = _pyautolib.new_SSLOptions(*args)
         try: self.this.append(this)
         except: self.this = this
-    __swig_destroy__ = _pyautolib.delete_HTTPSOptions
+    __swig_destroy__ = _pyautolib.delete_SSLOptions
     __del__ = lambda self : None;
-HTTPSOptions_swigregister = _pyautolib.HTTPSOptions_swigregister
-HTTPSOptions_swigregister(HTTPSOptions)
+SSLOptions_swigregister = _pyautolib.SSLOptions_swigregister
+SSLOptions_swigregister(SSLOptions)
 
 class int_ptr(_object):
     """Proxy of C++ int_ptr class"""

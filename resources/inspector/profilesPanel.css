@@ -142,6 +142,10 @@
     -webkit-mask-position: 0 0;
 }
 
+.garbage-collect-status-bar-item .glyph {
+    -webkit-mask-position: -128px -24px;
+}
+
 .profile-launcher-view-content {
     position: absolute;
     top: 0;
@@ -192,6 +196,6 @@ body.inactive .profile-launcher-view-content button.running:not(.status-bar-item
 }
 
 @-webkit-keyframes row_highlight {
-    from {background-color: rgb(255, 255, 120); }
-    to { background-color: white; }
+    from {background-color: rgba(255, 255, 120, 1); }
+    to { background-color: rgba(255, 255, 120, 0); }
 }

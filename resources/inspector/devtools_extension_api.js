@@ -33,7 +33,6 @@ function defineCommonExtensionSymbols(apiPrivate)
 {
     if (!apiPrivate.audits)
         apiPrivate.audits = {};
-
     apiPrivate.audits.Severity = {
         Info: "info",
         Warning: "warning",
@@ -49,6 +48,16 @@ function defineCommonExtensionSymbols(apiPrivate)
         Warning: "warning",
         Error: "error"
     };
+
+    if (!apiPrivate.panels)
+        apiPrivate.panels = {};
+    apiPrivate.panels.SearchAction = {
+        CancelSearch: "cancelSearch",
+        PerformSearch: "performSearch",
+        NextSearchResult: "nextSearchResult",
+        PreviousSearchResult: "previousSearchResult"
+    };
+
     apiPrivate.Events = {
         AuditStarted: "audit-started-",
         ButtonClicked: "button-clicked-",
@@ -65,6 +74,7 @@ function defineCommonExtensionSymbols(apiPrivate)
         ViewShown: "view-shown-",
         ViewHidden: "view-hidden-"
     };
+
     apiPrivate.Commands = {
         AddAuditCategory: "addAuditCategory",
         AddAuditResult: "addAuditResult",
@@ -85,8 +95,10 @@ function defineCommonExtensionSymbols(apiPrivate)
         SetSidebarContent: "setSidebarContent",
         SetSidebarHeight: "setSidebarHeight",
         SetSidebarPage: "setSidebarPage",
+        ShowPanel: "showPanel",
         StopAuditCategoryRun: "stopAuditCategoryRun",
         Unsubscribe: "unsubscribe",
+        UpdateAuditProgress: "updateAuditProgress",
         UpdateButton: "updateButton",
         InspectedURLChanged: "inspectedURLChanged"
     };
@@ -101,6 +113,7 @@ defineCommonExtensionSymbols(apiPrivate);
 
 var commands = apiPrivate.Commands;
 var events = apiPrivate.Events;
+var userAction = false;
 
 // Here and below, all constructors are private to API implementation.
 // For a public type Foo, if internal fields are present, these are on
@@ -306,13 +319,24 @@ Panels.prototype = {
         else {
             function callbackWrapper(message)
             {
-                callback.call(null, message.resource, message.lineNumber);
+                // Allow the panel to show itself when handling the event.
+                userAction = true;
+                try {
+                    callback.call(null, new Resource(message.resource), message.lineNumber);
+                } finally {
+                    userAction = false;
+                }
             }
             extensionServer.registerHandler(events.OpenResource, callbackWrapper);
         }
         // Only send command if we either removed an existing handler or added handler and had none before.
         if (hadHandler === !callback)
             extensionServer.sendRequest({ command: commands.SetOpenResourceHandler, "handlerPresent": !!callback });
+    },
+
+    get SearchAction()
+    {
+        return apiPrivate.panels.SearchAction;
     }
 }
 
@@ -326,7 +350,7 @@ function ExtensionViewImpl(id)
     function dispatchShowEvent(message)
     {
         var frameIndex = message.arguments[0];
-        this._fire(window.top.frames[frameIndex]);
+        this._fire(window.parent.frames[frameIndex]);
     }
     this.onShown = new EventSink(events.ViewShown + id, dispatchShowEvent);
     this.onHidden = new EventSink(events.ViewHidden + id);
@@ -355,10 +379,10 @@ PanelWithSidebarImpl.prototype = {
             callback(new ExtensionSidebarPane(id));
         }
         extensionServer.sendRequest(request, callback && callbackWrapper);
-    }
-}
+    },
 
-PanelWithSidebarImpl.prototype.__proto__ = ExtensionViewImpl.prototype;
+    __proto__: ExtensionViewImpl.prototype
+}
 
 /**
  * @constructor
@@ -395,10 +419,22 @@ ExtensionPanelImpl.prototype = {
         };
         extensionServer.sendRequest(request);
         return new Button(id);
-    }
-};
+    },
 
-ExtensionPanelImpl.prototype.__proto__ = ExtensionViewImpl.prototype;
+    show: function()
+    {
+        if (!userAction)
+            return;
+
+        var request = {
+            command: commands.ShowPanel,
+            id: this._id
+        };
+        extensionServer.sendRequest(request);
+    },
+
+    __proto__: ExtensionViewImpl.prototype
+}
 
 /**
  * @constructor
@@ -475,6 +511,8 @@ Audits.prototype = {
     addCategory: function(displayName, resultCount)
     {
         var id = "extension-audit-category-" + extensionServer.nextObjectId();
+        if (typeof resultCount !== "undefined")
+            console.warn("Passing resultCount to audits.addCategory() is deprecated. Use AuditResult.updateProgress() instead.");
         extensionServer.sendRequest({ command: commands.AddAuditCategory, id: id, displayName: displayName, resultCount: resultCount });
         return new AuditCategory(id);
     }
@@ -534,6 +572,11 @@ AuditResultImpl.prototype = {
     createResult: function()
     {
         return new AuditResultNode(Array.prototype.slice.call(arguments));
+    },
+
+    updateProgress: function(worked, totalWork)
+    {
+        extensionServer.sendRequest({ command: commands.UpdateAuditProgress, resultId: this._id, progress: worked / totalWork });
     },
 
     done: function()
@@ -704,10 +747,13 @@ function ExtensionServerClient()
     this._port.addEventListener("message", this._onMessage.bind(this), false);
     this._port.start();
 
-    top.postMessage("registerExtension", [ channel.port2 ], "*");
+    window.parent.postMessage("registerExtension", [ channel.port2 ], "*");
 }
 
 ExtensionServerClient.prototype = {
+    /**
+     * @param {function()=} callback
+     */
     sendRequest: function(message, callback)
     {
         if (typeof callback === "function")
@@ -915,5 +961,5 @@ function platformExtensionAPI(coreAPI)
 
         var tabId;
         var extensionInfo = {};
-        platformExtensionAPI(injectedExtensionAPI("remote-" + top.frames.length));
+        platformExtensionAPI(injectedExtensionAPI("remote-" + window.parent.frames.length));
     })();
